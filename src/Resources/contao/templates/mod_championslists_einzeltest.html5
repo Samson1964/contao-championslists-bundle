@@ -1,0 +1,42 @@
+<div class="ce_championslists block">
+	<?php if ($this->headline): ?>
+		<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+	<?php endif; ?> 
+	<table class="championslist">
+	<?php foreach($this->item as $item): ?>
+		<tr class="item <?php echo $item['class']; ?>">
+			<?php if($item['number']): ?>
+				<td class="nummer"><?php echo $item['number'].'.'; ?></td>
+			<?php else: ?>
+				<td class="nummer"></td>
+			<?php endif; ?>
+			<td class="jahr_ort">
+				<?php if($item['url']): ?>
+					<a href="<?php echo $item['url']; ?>"><?php echo $item['year']; ?><?php if($item['place']) echo ' '.$item['place']; ?></a>
+				<?php else: ?>
+					<?php echo $item['year']; ?>
+					<?php if($item['place']) echo ' '.$item['place']; ?>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<tr class="item <?php echo $item['class']; ?>">
+			<td class="bild">
+				<?php if($item['image']): ?>
+					<a class="cboxElement" data-lightbox="" href="<?php echo $item['image']; ?>">
+						<img width="70" height="70" alt="" src="<?php echo $item['thumbnail']; ?>">
+					</a>
+				<?php else: ?>
+					<img src="system/modules/championslists/assets/images/unbekannt_m.png" width="70" height="70" />
+				<?php endif; ?>
+			</td>
+			<td class="infozelle">
+				<span class="name"><?php echo $item['name']; ?> <?php if($item['age']) echo '('.$item['age'].')'; ?></span>
+				<span class="verein"><?php echo $item['clubrating']; ?></span>
+				<?php if($item['info']): ?>
+					<div class="info"><?php echo $item['info']; ?></div>
+				<?php endif; ?>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+</div>
