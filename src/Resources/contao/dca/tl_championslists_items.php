@@ -713,9 +713,27 @@ class tl_championslists_items extends Backend
 		$temp = '<div class="tl_content_left"><b>'.$arrRow['year'].'</b> ';
 		if($arrRow['number']) $temp .= '['.$arrRow['number'].'] ';
 		if($arrRow['place']) $temp .= $arrRow['place'].' - ';
-		if($arrRow['name']) $temp .= '1. <b style="color:#007500">'.$arrRow['name'].'</b> ';
-		if($arrRow['name2']) $temp .= '2. <b>'.$arrRow['name2'].'</b> ';
-		if($arrRow['name3']) $temp .= '3. <b>'.$arrRow['name3'].'</b>';
+		if($arrRow['name']) $temp .= '1. <b style="color:#007500">'.$arrRow['name'].'</b>';
+
+		if($GLOBALS['championslist-typ'] == 'E')
+		{
+			// Restliche Spieler ausgeben
+			for($nr = 2; $nr <= 6; $nr++)
+			{
+				if($arrRow['person'.$nr])
+				{
+					$typname = $GLOBALS['TL_LANG']['tl_championslists_item']['typen'][$arrRow['typ'.$nr]];
+					$temp .= ' | <b>'.$arrRow['name'.$nr].'</b> (<i>'.$typname.'</i>)';
+				}
+			}
+		}
+		else
+		{
+			// Restliche Mannschaften ausgeben
+			if($arrRow['name2']) $temp .= ', 2. <b>'.$arrRow['name2'].'</b>';
+			if($arrRow['name3']) $temp .= ', 3. <b>'.$arrRow['name3'].'</b>';
+		}
+
 		return $temp.'</div>';
 	}
 
@@ -726,6 +744,7 @@ class tl_championslists_items extends Backend
 	{
 
 		// Listentyp mittels Abfrage ermitteln
+		$GLOBALS['championslist-typ'] = 'E';
 		$objItem = $this->Database->prepare("SELECT pid FROM tl_championslists_items WHERE id=?")
 		                 ->limit(1)
 		                 ->execute($dc->id);
@@ -735,6 +754,7 @@ class tl_championslists_items extends Backend
 
 		if($objListe->typ == 'M')
 		{
+			$GLOBALS['championslist-typ'] = 'M';
 			PaletteManipulator::create()
 			    ->removeField('age', 'person1_legend')
 			    ->removeField('clubrating', 'person1_legend')

@@ -52,7 +52,7 @@ class Championslist extends \ContentElement
 				if($this->championslist_alttemplate) // Alternativ-Template wurde definiert
 					$this->Template = new FrontendTemplate($this->championstemplate);
 				else // Kein Alternativ-Template, dann Standard-Template nehmen
-					($objListe->templatefile) ? $this->Template = new FrontendTemplate($objListe->templatefile) : $this->Template = new FrontendTemplate($this->strTemplate);
+					($objListe->templatefile) ? $this->Template = new \FrontendTemplate($objListe->templatefile) : $this->Template = new FrontendTemplate($this->strTemplate);
 				// Restliche Variablen zuweisen
 				$this->Template->id = $this->championslist;
 				$this->Template->vorlage = $objListe->templatefile;
@@ -75,11 +75,11 @@ class Championslist extends \ContentElement
 					}
 					// Abfrage starten
 					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid=? AND year >= $von AND year <= $bis ORDER BY year $order")
-				                               ->execute($this->championslist);
+					                           ->execute($this->championslist);
 				}
 				else // Keine Filterung
 					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid=? ORDER BY year DESC")
-				                               ->execute($this->championslist);
+					                           ->execute($this->championslist);
 				if($objItems)
 				{
 					$i = 0;
@@ -87,13 +87,11 @@ class Championslist extends \ContentElement
 					{
 						(bcmod($i,2)) ? $item[$i]['class'] = 'odd' : $item[$i]['class'] = 'even';
 						$item[$i]['number'] = $objItems->number;
-						$item[$i]['year'] = $objItems->year.$picHeightPlayer;
+						$item[$i]['year'] = $objItems->year;
 						$item[$i]['place'] = $objItems->place;
 						$item[$i]['url'] = $objItems->url;
 						$item[$i]['target'] = $objItems->target;
 						$item[$i]['name'] = $objItems->name;
-						$item[$i]['name2'] = $objItems->name2;
-						$item[$i]['name3'] = $objItems->name3;
 						$item[$i]['nomination'] = $objItems->nomination;
 						$item[$i]['age'] = $objItems->age;
 						$item[$i]['clubrating'] = $objItems->clubrating;
@@ -106,8 +104,77 @@ class Championslist extends \ContentElement
 						}
 						else $item[$i]['image'] = '';
 						$item[$i]['info'] = $objItems->info;
+						// Weitere Spieler?
+						$item[$i]['players'] = array();
+						for($nr = 2; $nr <= 6; $nr++)
+						{
+							if($objItems->{'person'.$nr})
+							{
+								// Bild extrahieren
+								if($objItems->{'singleSRC'.$nr})
+								{
+									$objFile = \FilesModel::findByPk($objItems->{'singleSRC'.$nr});
+									$image = $objFile->path;
+									$thumbnail = \Image::get($objFile->path, $picWidthPlayer, $picHeightPlayer, 'crop');
+								}
+								else 
+								{
+									$image = '';
+									$thumbnail = '';
+								}
+								$item[$i]['players_index'][] = array
+								(
+									'typ'        => $objItems->{'typ'.$nr},
+									'name'       => $objItems->{'name'.$nr},
+									'age'        => $objItems->{'age'.$nr},
+									'clubrating' => $objItems->{'clubrating'.$nr},
+									'image'      => $image,
+									'thumbnail'  => $thumbnail
+								);
+								// Alternativer Zugriff
+								$item[$i]['players_key'][$objItems->{'typ'.$nr}] = array
+								(
+									'name'       => $objItems->{'name'.$nr},
+									'age'        => $objItems->{'age'.$nr},
+									'clubrating' => $objItems->{'clubrating'.$nr},
+									'image'      => $image,
+									'thumbnail'  => $thumbnail
+								);
+							}
+						}
+						// Zusätzliche Felder bei Mannschaften ausgeben
+						$item[$i]['name2'] = $objItems->name2;
+						$item[$i]['nomination2'] = $objItems->nomination2;
+						$item[$i]['name3'] = $objItems->name3;
+						$item[$i]['nomination3'] = $objItems->nomination3;
+						// Bild extrahieren
+						if($objItems->singleSRC2)
+						{
+							$objFile = \FilesModel::findByPk($objItems->singleSRC2);
+							$item[$i]['image2'] = $objFile->path;
+							$item[$i]['thumbnail2'] = \Image::get($objFile->path, $picWidthPlayer, $picHeightPlayer, 'crop');
+						}
+						else 
+						{
+							$item[$i]['image2'] = '';
+							$item[$i]['thumbnail2'] = '';
+						}
+						if($objItems->singleSRC3)
+						{
+							$objFile = \FilesModel::findByPk($objItems->singleSRC3);
+							$item[$i]['image3'] = $objFile->path;
+							$item[$i]['thumbnail3'] = \Image::get($objFile->path, $picWidthPlayer, $picHeightPlayer, 'crop');
+						}
+						else 
+						{
+							$item[$i]['image3'] = '';
+							$item[$i]['thumbnail3'] = '';
+						}
 						$i++;
 					}
+					//echo "<pre>";
+					//print_r($item);
+					//echo "</pre>";
 					$this->Template->item = $item;
 				}
 			}
