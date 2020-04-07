@@ -1,6 +1,7 @@
 <?php
+namespace Schachbulle\ContaoChampionslistsBundle\ContentElements;
 
-class ChampionslistClass extends \ContentElement
+class Championslist extends \ContentElement
 {
 
 	/**
@@ -115,4 +116,3 @@ class ChampionslistClass extends \ContentElement
 
 	}
 }
-?>
