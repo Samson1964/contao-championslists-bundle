@@ -713,25 +713,32 @@ class tl_championslists_items extends Backend
 		$temp = '<div class="tl_content_left"><b>'.$arrRow['year'].'</b> ';
 		if($arrRow['number']) $temp .= '['.$arrRow['number'].'] ';
 		if($arrRow['place']) $temp .= $arrRow['place'].' - ';
-		if($arrRow['name']) $temp .= '1. <b style="color:#007500">'.$arrRow['name'].'</b>';
+		if($arrRow['name']) $temp .= '1. <b style="color:#007500">'.$arrRow['name'].'</b> ';
 
 		if($GLOBALS['championslist-typ'] == 'E')
 		{
+			if($arrRow['singleSRC']) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
+			if($arrRow['spielerregister_id']) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
 			// Restliche Spieler ausgeben
 			for($nr = 2; $nr <= 6; $nr++)
 			{
 				if($arrRow['person'.$nr])
 				{
 					$typname = $GLOBALS['TL_LANG']['tl_championslists_item']['typen'][$arrRow['typ'.$nr]];
-					$temp .= ' | <b>'.$arrRow['name'.$nr].'</b> (<i>'.$typname.'</i>)';
+					$temp .= ' | <b>'.$arrRow['name'.$nr].'</b> (<i>'.$typname.'</i>) ';
+					if($arrRow['singleSRC'.$nr]) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
+					if($arrRow['spielerregister_id'.$nr]) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
 				}
 			}
 		}
 		else
 		{
+			if($arrRow['singleSRC']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
 			// Restliche Mannschaften ausgeben
-			if($arrRow['name2']) $temp .= ', 2. <b>'.$arrRow['name2'].'</b>';
-			if($arrRow['name3']) $temp .= ', 3. <b>'.$arrRow['name3'].'</b>';
+			if($arrRow['name2']) $temp .= ' 2. <b>'.$arrRow['name2'].'</b> ';
+			if($arrRow['singleSRC2']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
+			if($arrRow['name3']) $temp .= ' 3. <b>'.$arrRow['name3'].'</b> ';
+			if($arrRow['singleSRC3']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
 		}
 
 		return $temp.'</div>';
@@ -787,14 +794,8 @@ class tl_championslists_items extends Backend
 
 	public function getRegisterliste(DataContainer $dc)
 	{
-		$array = array();
-		$objRegister = $this->Database->prepare("SELECT * FROM tl_spielerregister ORDER BY surname1,firstname1 ASC ")->execute();
-		$array[0] = '-';
-		while($objRegister->next())
-		{
-			$array[$objRegister->id] = $objRegister->surname1 . ',' . $objRegister->firstname1;
-		}
-		return $array;
+
+		return \Schachbulle\ContaoSpielerregisterBundle\Klassen\Helper::getRegister();
 
 	}
 

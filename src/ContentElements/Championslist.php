@@ -10,26 +10,6 @@ class Championslist extends \ContentElement
 	 */
 	protected $strTemplate = 'mod_championslists_einzel';
 
-	public function generate()
-	{
-		if (TL_MODE == 'BE')
-		{
-			/** @var \BackendTemplate|object $objTemplate */
-			$objTemplate = new \BackendTemplate('be_wildcard');
-
-			$objTemplate->wildcard = '### MEISTERLISTE ###';
-			$objTemplate->id = $this->id;
-			$objTemplate->title = $this->title;
-			$objTemplate->id = $this->id;
-			$objTemplate->link = $this->name;
-			$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id; 
-			
-			return $objTemplate->parse();
-		}
-
-		return parent::generate();
-	} 
-	
 	/**
 	 * Generate the module
 	 */

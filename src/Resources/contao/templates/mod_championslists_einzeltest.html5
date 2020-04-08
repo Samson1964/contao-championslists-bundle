@@ -26,7 +26,7 @@
 						<img width="70" height="70" alt="" src="<?php echo $item['thumbnail']; ?>">
 					</a>
 				<?php else: ?>
-					<img src="system/modules/championslists/assets/images/unbekannt_m.png" width="70" height="70" />
+					<img src="bundles/contaochampionslists/images/unbekannt_m.png" width="70" height="70" />
 				<?php endif; ?>
 			</td>
 			<td class="infozelle">
