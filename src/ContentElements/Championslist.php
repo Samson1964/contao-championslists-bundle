@@ -8,7 +8,7 @@ class Championslist extends \ContentElement
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'mod_championslists_einzel';
+	protected $strTemplate = 'mod_championslists_single';
 
 	/**
 	 * Generate the module
@@ -21,7 +21,12 @@ class Championslist extends \ContentElement
 			// Voreinstellungen laden
 			$picWidthPlayer = $this->championslists_picWidthPlayer ? $this->championslists_picWidthPlayer : $GLOBALS['TL_CONFIG']['championslists_picWidthPlayer'];
 			$picHeightPlayer = $this->championslists_picHeightPlayer ? $this->championslists_picHeightPlayer : $GLOBALS['TL_CONFIG']['championslists_picHeightPlayer'];
+			$picWidthTeam = $this->championslists_picWidthTeam ? $this->championslists_picWidthTeam : $GLOBALS['TL_CONFIG']['championslists_picWidthTeam'];
+			$picHeightTeam = $this->championslists_picHeightTeam ? $this->championslists_picHeightTeam : $GLOBALS['TL_CONFIG']['championslists_picHeightTeam'];
 
+			// Standardbilder laden
+			//$this->championslists_picWidthTeam
+			
 			// Listentitel laden
 			$objListe = $this->Database->prepare("SELECT * FROM tl_championslists WHERE id=?")
 			                           ->execute($this->championslist);
@@ -30,15 +35,15 @@ class Championslist extends \ContentElement
 			{
 				// Template zuweisen
 				if($this->championslist_alttemplate) // Alternativ-Template wurde definiert
-					$this->Template = new FrontendTemplate($this->championstemplate);
+					$this->Template = new \FrontendTemplate($this->championstemplate);
 				else // Kein Alternativ-Template, dann Standard-Template nehmen
-					($objListe->templatefile) ? $this->Template = new \FrontendTemplate($objListe->templatefile) : $this->Template = new FrontendTemplate($this->strTemplate);
+					($objListe->templatefile) ? $this->Template = new \FrontendTemplate($objListe->templatefile) : $this->Template = new \FrontendTemplate($this->strTemplate);
 				// Restliche Variablen zuweisen
 				$this->Template->id = $this->championslist;
 				$this->Template->vorlage = $objListe->templatefile;
 				$this->Template->title = $objListe->title;
 				// Listeneinträge laden
-				if($this->championslist_filter) // Filterung nach Jahren gewünscht
+				if($this->championslist_filter && $this->championsfrom && $this->championsto) // Filterung nach Jahren gewünscht
 				{
 					// Sortierung festlegen
 					($this->championsfrom < $this->championsto) ? $order = 'ASC' : $order = 'DESC';

@@ -4,14 +4,14 @@
  * Paletten
  */
 //$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslistType';
-//$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslist_alttemplate';
-//$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslist_filter';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslist_alttemplate';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslist_filter';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['championslists'] = '{type_legend},type;{champions_legend},championslist,championslist_alttemplate,championslist_filter;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['championslistsMono'] = '{type_legend},type,headline,championslistType;{champions_legend},championslist,championslist_alttemplate,championslist_filter;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['championslistsMulti'] = '{type_legend},type,headline,championslistType;{champions_legend},championslist,championslist_alttemplate,championslist_filter;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 //
-//$GLOBALS['TL_DCA']['tl_content']['subpalettes']['championslist_alttemplate'] = 'championstemplate';
-//$GLOBALS['TL_DCA']['tl_content']['subpalettes']['championslist_filter'] = 'championsfrom,championsto';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['championslist_alttemplate'] = 'championstemplate';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['championslist_filter'] = 'championsfrom,championsto';
 
 /**
  * Felder

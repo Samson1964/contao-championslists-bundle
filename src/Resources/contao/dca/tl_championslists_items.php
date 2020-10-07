@@ -715,7 +715,7 @@ class tl_championslists_items extends Backend
 		if($arrRow['place']) $temp .= $arrRow['place'].' - ';
 		if($arrRow['name']) $temp .= '1. <b style="color:#007500">'.$arrRow['name'].'</b> ';
 
-		if($GLOBALS['championslist-typ'] == 'E')
+		if($GLOBALS['championslist-typ'] == 'E' || $GLOBALS['championslist-typ'] == 'F')
 		{
 			if($arrRow['singleSRC']) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
 			if($arrRow['spielerregister_id']) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';

@@ -1,0 +1,37 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<?php foreach($this->item as $item): ?>
+	<div class="item <?= $item['class'] ?>">
+		<div class="row row1">
+			<div class="nummer col1">
+				<?php if($item['number']): ?><?= $item['number'].'.' ?><?php endif; ?>
+			</div>
+			<div class="jahr_ort col2">
+				<?php if($item['url']): ?>
+					<a href="<?= $item['url'] ?>"<?php if($item['target']): ?> target="_blank"<?php endif; ?>><?= $item['year'] ?><?php if($item['place']) echo ' '.$item['place']; ?></a>
+				<?php else: ?>
+					<?= $item['year'] ?>
+					<?php if($item['place']) echo ' '.$item['place']; ?>
+				<?php endif; ?>
+			</div>
+		</div>
+		<div class="row row2">
+			<div class="info">
+				<?php if($item['defaultImage']): ?>
+					<img src="<?= $item['image'] ?>" alt="Standardbild" width="<?= $item['image_width'] ?>" height="<?= $item['image_height'] ?>" style="float:left;">
+				<?php else: ?>
+					<a href="<?= $item['image'] ?>" data-lightbox="" class="cboxElement"><img src="<?= $item['thumbnail'] ?>" alt="Spielerbild" width="<?= $item['image_width'] ?>" height="<?= $item['image_height'] ?>" style="float:left;"></a>
+				<?php endif; ?>
+				<span class="name"><?= $item['name']; ?> <?php if($item['age']) echo '('.$item['age'].')'; ?></span>
+				<span class="verein"><?= $item['clubrating'] ?></span>
+				<?php if($item['info']): ?>
+					<div class="text"><?= $item['info'] ?></div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+<?php endforeach; ?>
+
+<?php $this->endblock(); ?> 
