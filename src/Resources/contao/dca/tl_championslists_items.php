@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'mode'                    => 4,
 			'disableGrouping'         => true,
 			'fields'                  => array('year DESC'),
-			'headerFields'            => array('title', 'templatefile'),
+			'headerFields'            => array('title', 'typ', 'templatefile'),
 			'panelLayout'             => 'filter;sort,search,limit',
 			'child_record_callback'   => array('tl_championslists_items', 'listPersons'),
 		),

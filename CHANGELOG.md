@@ -1,5 +1,11 @@
 # Meisterliste Changelog
 
+## Version 1.1.0 (2020-10-09)
+
+* Change: Reihenfolge der Einstellungen
+* Add: Listentyp in Header Datensatzauflistung hinzugefügt
+* Fix: Standardbilder werden nicht geladen, Code hat gefehlt
+
 ## Version 1.0.0 (2020-10-07)
 
 * Hauptverzeichnis aufgeräumt

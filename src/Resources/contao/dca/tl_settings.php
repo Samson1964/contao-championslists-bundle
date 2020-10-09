@@ -14,7 +14,7 @@
 /**
  * palettes
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{championslists_legend:hide},championslists_picWidthPlayer,championslists_picHeightPlayer,championslists_picWidthTeam,championslists_picHeightTeam,championslists_defaultImageMen,championslists_defaultImageWomen,championslists_defaultImageTeamsMen,championslists_defaultImageTeamsWomen';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{championslists_legend:hide},championslists_defaultImageMen,championslists_defaultImageWomen,championslists_picWidthPlayer,championslists_picHeightPlayer,championslists_defaultImageTeamsMen,championslists_defaultImageTeamsWomen,championslists_picWidthTeam,championslists_picHeightTeam';
 
 /**
  * fields
