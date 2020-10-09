@@ -1,5 +1,11 @@
 # Meisterliste Changelog
 
+## Version 1.1.1 (2020-10-09)
+
+* Change: DIV-Container für Spielerfoto mit Randabstand im Template mod_championslists_single
+* Add: Typ der Meisterliste als Filter in der Datensatzauflistung
+* Add: Template der Meisterliste als Filter in der Datensatzauflistung
+
 ## Version 1.1.0 (2020-10-09)
 
 * Change: Reihenfolge der Einstellungen

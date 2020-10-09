@@ -141,7 +141,7 @@ $GLOBALS['TL_DCA']['tl_championslists'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists']['typ'],
 			'exclude'                 => true,
-			'filter'                  => false,
+			'filter'                  => true,
 			'default'                 => 'E',
 			'inputType'               => 'select',
 			'options'                 => $GLOBALS['TL_LANG']['tl_championslists']['typen'], 
@@ -156,6 +156,7 @@ $GLOBALS['TL_DCA']['tl_championslists'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists']['templatefile'],
 			'exclude'                 => true,
+			'filter'                  => true,
 			'inputType'               => 'select',
 			'options_callback'        => array('tl_championslists', 'getTemplates'),
 			'eval'                    => array('tl_class'=>'w50'),
