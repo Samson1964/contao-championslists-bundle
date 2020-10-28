@@ -1,5 +1,10 @@
 # Meisterliste Changelog
 
+## Version 1.1.2 (2020-10-28)
+
+* Fix: Syntaxfehler im Template mod_championslists_single
+* Fix Spielerregister-Abfrage: Erfolgt jetzt über Helper-Funktion des Spielerregister-Bundles
+
 ## Version 1.1.1 (2020-10-09)
 
 * Change: DIV-Container für Spielerfoto mit Randabstand im Template mod_championslists_single

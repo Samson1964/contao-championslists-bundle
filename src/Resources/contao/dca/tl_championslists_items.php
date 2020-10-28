@@ -237,7 +237,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['spielerregister_id'],
 			'exclude'                 => true,
-			'options_callback'        => array('tl_championslists_items', 'getRegisterliste'),
+			'options_callback'        => array('\Schachbulle\ContaoSpielerregisterBundle\Klassen\Helper', 'getRegister'),
 			'inputType'               => 'select',
 			'eval'                    => array
 			(
@@ -245,6 +245,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 				'multiple'            => false,
 				'chosen'              => true,
 				'submitOnChange'      => false,
+				'includeBlankOption'  => true,
 				'tl_class'            => 'long'
 			),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
