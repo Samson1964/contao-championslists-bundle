@@ -1,7 +1,7 @@
-<div class="ce_championslists team block">
-	<?php if ($this->headline): ?>
-		<<?= $this->hl ?>><?= $this->headline ?></<?= $this->hl ?>>
-	<?php endif; ?> 
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
 	<?php foreach($this->item as $item): ?>
 		<div class="item <?= $item['class'] ?>">
 			<div class="row row1">
@@ -19,18 +19,12 @@
 			</div>
 			<div class="row row2">
 				<div class="bild col1">
-					<?php 
-					if($item['image'])
-					{
-						$src = \Image::get($item['image'], 70, 70, 'crop');
-						$content = '<a href="'.$item['image'].'" data-lightbox="" class="cboxElement"><img src="'.$src.'" alt="" width="70" height="70"></a>';
-					}
-					else
-					{
-						$content = '';
-					}
-					echo $content;
-					?>
+					<figure class="image_container float_left">
+						<a href="<?= $item['image'] ?>" data-lightbox="championslists<?= $item['id'] ?>"><img src="<?= $item['thumbnail'] ?>" alt="<?= $item['imageAlt'] ?>" title="<?= $item['imageTitle'] ?>"<?= $item['imageSize'] ?>></a>
+						<?php if ($item['imageCaption']): ?>
+							<figcaption class="caption"><?= $item['imageCaption'] ?></figcaption>
+						<?php endif; ?>
+					</figure>
 				</div>
 				<div class="info col2">
 					<span class="name"><?= $item['name']; ?></span>
@@ -39,4 +33,5 @@
 			</div>
 		</div>
 	<?php endforeach; ?>
-</div> 
+
+<?php $this->endblock(); ?>

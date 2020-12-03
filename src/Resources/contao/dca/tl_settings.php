@@ -14,55 +14,11 @@
 /**
  * palettes
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{championslists_legend:hide},championslists_defaultImageMen,championslists_defaultImageWomen,championslists_picWidthPlayer,championslists_picHeightPlayer,championslists_defaultImageTeamsMen,championslists_defaultImageTeamsWomen,championslists_picWidthTeam,championslists_picHeightTeam';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{championslists_legend:hide},championslists_defaultImageMen,championslists_defaultImageWomen,championslists_imageSizePlayer,championslists_defaultImageTeamsMen,championslists_defaultImageTeamsWomen,championslists_imageSizeTeam';
 
 /**
  * fields
  */
-
-$GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_picWidthPlayer'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['championslists_picWidthPlayer'],
-	'inputType'               => 'text',
-	'eval'                    => array
-	(
-		'tl_class'            => 'w50',
-		'rgxp'                => 'digit'
-	)
-);
-
-$GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_picHeightPlayer'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['championslists_picHeightPlayer'],
-	'inputType'               => 'text',
-	'eval'                    => array
-	(
-		'tl_class'            => 'w50',
-		'rgxp'                => 'digit'
-	)
-);
-
-$GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_picWidthTeam'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['championslists_picWidthTeam'],
-	'inputType'               => 'text',
-	'eval'                    => array
-	(
-		'tl_class'            => 'w50',
-		'rgxp'                => 'digit'
-	)
-);
-
-$GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_picHeightTeam'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['championslists_picHeightTeam'],
-	'inputType'               => 'text',
-	'eval'                    => array
-	(
-		'tl_class'            => 'w50',
-		'rgxp'                => 'digit'
-	)
-);
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_defaultImageMen'] = array
 (
@@ -111,3 +67,31 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_defaultImageTeamsWom
 		'tl_class'            => 'w50'
 	)
 );
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_imageSizePlayer'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['championslists_imageSizePlayer'],
+	'exclude'                 => true,
+	'inputType'               => 'imageSize',
+	'reference'               => &$GLOBALS['TL_LANG']['MSC'],
+	'eval'                    => array('rgxp'=>'natural', 'includeBlankOption'=>true, 'nospace'=>true, 'helpwizard'=>true, 'tl_class'=>'w50'),
+	'options_callback' => static function ()
+	{
+		return System::getContainer()->get('contao.image.image_sizes')->getOptionsForUser(BackendUser::getInstance());
+	},
+	'sql'                     => "varchar(255) NOT NULL default ''"
+); 
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_imageSizeTeam'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['championslists_imageSizeTeam'],
+	'exclude'                 => true,
+	'inputType'               => 'imageSize',
+	'reference'               => &$GLOBALS['TL_LANG']['MSC'],
+	'eval'                    => array('rgxp'=>'natural', 'includeBlankOption'=>true, 'nospace'=>true, 'helpwizard'=>true, 'tl_class'=>'w50'),
+	'options_callback' => static function ()
+	{
+		return System::getContainer()->get('contao.image.image_sizes')->getOptionsForUser(BackendUser::getInstance());
+	},
+	'sql'                     => "varchar(255) NOT NULL default ''"
+); 

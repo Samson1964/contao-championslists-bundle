@@ -1,5 +1,15 @@
 # Meisterliste Changelog
 
+## Version 2.0.0 (2020-12-03)
+
+* Fix: tl_championslist_items Funktion checkPalette berücksichtigte keine weiblichen Mannschaftsturniere bei der Palettenmanipulation
+* Change: Bildgrößen-Einstellungen in System auf Contao 4 geändert
+* Change: Championslist.php Bildverarbeitung angepaßt
+* Add: Inhaltselement für Anzeige des aktuellen Meisters
+* Fix: tl_championslists_item.published hat gefehlt
+* Delete: Alte Templates
+* Change: Template mod_championslists_team im neuen Format
+
 ## Version 1.1.2 (2020-10-28)
 
 * Fix: Syntaxfehler im Template mod_championslists_single

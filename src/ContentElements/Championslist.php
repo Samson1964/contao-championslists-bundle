@@ -18,12 +18,6 @@ class Championslist extends \ContentElement
 		// Adresse aus Datenbank laden, wenn ID übergeben wurde
 		if($this->championslist)
 		{
-			// Voreinstellungen Männer/Frauen laden
-			$picWidthPlayer = $this->championslists_picWidthPlayer ? $this->championslists_picWidthPlayer : $GLOBALS['TL_CONFIG']['championslists_picWidthPlayer'];
-			$picHeightPlayer = $this->championslists_picHeightPlayer ? $this->championslists_picHeightPlayer : $GLOBALS['TL_CONFIG']['championslists_picHeightPlayer'];
-			// Voreinstellungen Mannschaften laden
-			$picWidthTeam = $this->championslists_picWidthTeam ? $this->championslists_picWidthTeam : $GLOBALS['TL_CONFIG']['championslists_picWidthTeam'];
-			$picHeightTeam = $this->championslists_picHeightTeam ? $this->championslists_picHeightTeam : $GLOBALS['TL_CONFIG']['championslists_picHeightTeam'];
 
 			// Listentitel laden
 			$objListe = $this->Database->prepare("SELECT * FROM tl_championslists WHERE id=?")
@@ -32,15 +26,11 @@ class Championslist extends \ContentElement
 			// Liste gefunden
 			if($objListe)
 			{
-				// Template zuweisen
-				if($this->championslist_alttemplate) // Alternativ-Template wurde definiert
-					$this->Template = new \FrontendTemplate($this->championstemplate);
-				else // Kein Alternativ-Template, dann Standard-Template nehmen
-					($objListe->templatefile) ? $this->Template = new \FrontendTemplate($objListe->templatefile) : $this->Template = new \FrontendTemplate($this->strTemplate);
+				// Alternativ-Template zuweisen
+				if($this->championslist_alttemplate) $this->Template = new \FrontendTemplate($this->championstemplate);
 
 				// Restliche Variablen zuweisen
 				$this->Template->id = $this->championslist;
-				$this->Template->vorlage = $objListe->templatefile;
 				$this->Template->title = $objListe->title;
 
 				// Listeneinträge laden
@@ -60,42 +50,39 @@ class Championslist extends \ContentElement
 						$bis = $this->championsfrom;
 					}
 					// Abfrage starten
-					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid=? AND year >= $von AND year <= $bis ORDER BY year $order")
-					                           ->execute($this->championslist);
+					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? AND year >= $von AND year <= $bis ORDER BY year $order")
+					                           ->execute($this->championslist, 1);
 				}
 				else // Keine Filterung
-					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid=? ORDER BY year DESC")
-					                           ->execute($this->championslist);
+					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? ORDER BY year DESC")
+					                           ->execute($this->championslist, 1);
 
+				$item = array();
+				
 				if($objItems)
 				{
 					// Standardbilddatei und Standardbildmaße festlegen
 					switch($objListe->typ)
 					{
 						case 'E': // Einzelturnier
-							$bild_breite = $picWidthPlayer;
-							$bild_hoehe = $picHeightPlayer;
+							$bildgroesse = unserialize($GLOBALS['TL_CONFIG']['championslists_imageSizePlayer']);
 							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageMen'];
 							break;
 						case 'F': // Einzelturnier (weiblich)
-							$bild_breite = $picWidthPlayer;
-							$bild_hoehe = $picHeightPlayer;
+							$bildgroesse = unserialize($GLOBALS['TL_CONFIG']['championslists_imageSizePlayer']);
 							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageWomen'];
 							break;
 						case 'M': // Mannschaftsturnier
-							$bild_breite = $picWidthTeam;
-							$bild_hoehe = $picHeightTeam;
+							$bildgroesse = unserialize($GLOBALS['TL_CONFIG']['championslists_imageSizeTeam']);
 							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageTeamsMen'];
 							break;
 						case 'W': // Mannschaftsturnier (weiblich)
-							$bild_breite = $picWidthTeam;
-							$bild_hoehe = $picHeightTeam;
+							$bildgroesse = unserialize($GLOBALS['TL_CONFIG']['championslists_imageSizeTeam']);
 							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageTeamsWomen'];
 							break;
 						default:
 					}
-					if($bild) $bild = \FilesModel::findByUuid($bild)->path;
-					
+
 					$i = 0;
 					while($objItems->next())
 					{
@@ -109,29 +96,32 @@ class Championslist extends \ContentElement
 						$item[$i]['nomination'] = $objItems->nomination;
 						$item[$i]['age'] = $objItems->age;
 						$item[$i]['clubrating'] = $objItems->clubrating;
-						// Bild zuweisen
+
+						// Bild extrahieren
 						if($objItems->singleSRC)
 						{
-							// Bild für das Datensatz extrahieren
+							// Foto aus der Datenbank
 							$objFile = \FilesModel::findByPk($objItems->singleSRC);
-							$item[$i]['image'] = $objFile->path;
-							$item[$i]['thumbnail'] = \Image::get($objFile->path, $bild_breite, $bild_hoehe, 'crop');
 						}
 						else
 						{
-							// Der Datensatz hat kein Bild, Standardbild einbinden
-							if($bild)
-							{
-								$item[$i]['image'] = $bild;
-								$item[$i]['thumbnail'] = \Image::get($bild, $bild_breite, $bild_hoehe, 'crop');
-							}
-							else
-							{
-								$item[$i]['image'] = '';
-								$item[$i]['thumbnail'] = '';
-							}
+							// Standardfoto
+							$objFile = \FilesModel::findByUuid($bild);
 						}
+						$objBild = new \stdClass();
+						\Controller::addImageToTemplate($objBild, array('singleSRC' => $objFile->path, 'size' => $bildgroesse), \Config::get('maxImageWidth'), null, $objFile);
+
+						// Bild zuweisen
+						$item[$i]['image']         = $objBild->singleSRC;
+						$item[$i]['thumbnail']     = $objBild->src;
+						$item[$i]['imageSize']     = $objBild->imgSize;
+						$item[$i]['imageTitle']    = $objBild->imageTitle;
+						$item[$i]['imageAlt']      = $objBild->alt;
+						$item[$i]['imageCaption']  = $objBild->caption;
+
+						// Info ergänzen
 						$item[$i]['info'] = $objItems->info;
+
 						// Weitere Spieler?
 						$item[$i]['players'] = array();
 						for($nr = 2; $nr <= 6; $nr++)
@@ -141,32 +131,25 @@ class Championslist extends \ContentElement
 								// Bild extrahieren
 								if($objItems->{'singleSRC'.$nr})
 								{
+									// Foto aus der Datenbank
 									$objFile = \FilesModel::findByPk($objItems->{'singleSRC'.$nr});
-									$image = $objFile->path;
-									$thumbnail = \Image::get($objFile->path, $bild_breite, $bild_hoehe, 'crop');
 								}
-								else 
+								else
 								{
-									// Der Datensatz hat kein Bild, Standardbild einbinden
-									if($bild)
-									{
-										$image = $bild;
-										$thumbnail = \Image::get($bild, $bild_breite, $bild_hoehe, 'crop');;
-									}
-									else
-									{
-										$image = '';
-										$thumbnail = '';
-									}
+									// Standardfoto
+									$objFile = \FilesModel::findByUuid($bild);
 								}
+								$objBild = new \stdClass();
+								\Controller::addImageToTemplate($objBild, array('singleSRC' => $objFile->path, 'size' => $bildgroesse), \Config::get('maxImageWidth'), null, $objFile);
+
 								$item[$i]['players_index'][] = array
 								(
 									'typ'        => $objItems->{'typ'.$nr},
 									'name'       => $objItems->{'name'.$nr},
 									'age'        => $objItems->{'age'.$nr},
 									'clubrating' => $objItems->{'clubrating'.$nr},
-									'image'      => $image,
-									'thumbnail'  => $thumbnail
+									'image'      => $objBild->singleSRC,
+									'thumbnail'  => $objBild->src
 								);
 								// Alternativer Zugriff
 								$item[$i]['players_key'][$objItems->{'typ'.$nr}] = array
@@ -174,8 +157,8 @@ class Championslist extends \ContentElement
 									'name'       => $objItems->{'name'.$nr},
 									'age'        => $objItems->{'age'.$nr},
 									'clubrating' => $objItems->{'clubrating'.$nr},
-									'image'      => $image,
-									'thumbnail'  => $thumbnail
+									'image'      => $objBild->singleSRC,
+									'thumbnail'  => $objBild->src
 								);
 							}
 						}
@@ -184,52 +167,41 @@ class Championslist extends \ContentElement
 						$item[$i]['nomination2'] = $objItems->nomination2;
 						$item[$i]['name3'] = $objItems->name3;
 						$item[$i]['nomination3'] = $objItems->nomination3;
-						// Bild extrahieren
+
+						// Bild 2 extrahieren
 						if($objItems->singleSRC2)
 						{
+							// Foto aus der Datenbank
 							$objFile = \FilesModel::findByPk($objItems->singleSRC2);
-							$item[$i]['image2'] = $objFile->path;
-							$item[$i]['thumbnail2'] = \Image::get($objFile->path, $bild_breite, $bild_hoehe, 'crop');
 						}
-						else 
+						else
 						{
 							// Der Datensatz hat kein Bild, Standardbild einbinden
-							if($bild)
-							{
-								$item[$i]['image2'] = $bild;
-								$item[$i]['thumbnail2'] = \Image::get($bild, $bild_breite, $bild_hoehe, 'crop');;
-							}
-							else
-							{
-								$item[$i]['image2'] = '';
-								$item[$i]['thumbnail2'] = '';
-							}
+							$objFile = \FilesModel::findByUuid($bild);
 						}
+						$objBild = new \stdClass();
+						\Controller::addImageToTemplate($objBild, array('singleSRC' => $objFile->path, 'size' => $bildgroesse), \Config::get('maxImageWidth'), null, $objFile);
+						$item[$i]['image2'] = $objBild->singleSRC;
+						$item[$i]['thumbnail2'] = $objBild->src;
+
+						// Bild 3 extrahieren
 						if($objItems->singleSRC3)
 						{
+							// Foto aus der Datenbank
 							$objFile = \FilesModel::findByPk($objItems->singleSRC3);
-							$item[$i]['image3'] = $objFile->path;
-							$item[$i]['thumbnail3'] = \Image::get($objFile->path, $bild_breite, $bild_hoehe, 'crop');
 						}
-						else 
+						else
 						{
 							// Der Datensatz hat kein Bild, Standardbild einbinden
-							if($bild)
-							{
-								$item[$i]['image3'] = $bild;
-								$item[$i]['thumbnail3'] = \Image::get($bild, $bild_breite, $bild_hoehe, 'crop');;
-							}
-							else
-							{
-								$item[$i]['image3'] = '';
-								$item[$i]['thumbnail3'] = '';
-							}
+							$objFile = \FilesModel::findByUuid($bild);
 						}
+						$objBild = new \stdClass();
+						\Controller::addImageToTemplate($objBild, array('singleSRC' => $objFile->path, 'size' => $bildgroesse), \Config::get('maxImageWidth'), null, $objFile);
+						$item[$i]['image3'] = $objBild->singleSRC;
+						$item[$i]['thumbnail3'] = $objBild->src;
+
 						$i++;
 					}
-					//echo "<pre>";
-					//print_r($item);
-					//echo "</pre>";
 					$this->Template->item = $item;
 				}
 			}

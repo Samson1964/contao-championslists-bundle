@@ -23,14 +23,4 @@ $GLOBALS['BE_MOD']['content']['championslists'] = array
  * -------------------------------------------------------------------------
  */
 $GLOBALS['TL_CTE']['schach']['championslists'] = 'Schachbulle\ContaoChampionslistsBundle\ContentElements\Championslist';
-
-/**
- * -------------------------------------------------------------------------
- * Voreinstellungen
- * -------------------------------------------------------------------------
- */
-
-$GLOBALS['TL_CONFIG']['championslists_picWidthPlayer'] = 60;
-$GLOBALS['TL_CONFIG']['championslists_picHeightPlayer'] = 80;
-$GLOBALS['TL_CONFIG']['championslists_picWidthTeam'] = 100;
-$GLOBALS['TL_CONFIG']['championslists_picHeightTeam'] = 60;
+$GLOBALS['TL_CTE']['schach']['champion'] = 'Schachbulle\ContaoChampionslistsBundle\ContentElements\Champion';

@@ -64,6 +64,9 @@ $GLOBALS['TL_LANG']['tl_championslists_items']['person4'] = array('Hinzufügen',
 $GLOBALS['TL_LANG']['tl_championslists_items']['person5'] = array('Hinzufügen', 'Eine Person hinzufügen');
 $GLOBALS['TL_LANG']['tl_championslists_items']['person6'] = array('Hinzufügen', 'Eine Person hinzufügen');
 
+$GLOBALS['TL_LANG']['tl_championslists_items']['publish_legend'] = 'Veröffentlichung';
+$GLOBALS['TL_LANG']['tl_championslists_items']['published'] = array('Veröffentlichen', 'Datensatz veröffentlichen');
+
 $GLOBALS['TL_LANG']['tl_championslists_items']['typ'] = array('Typ', 'Personentyp');
 
 $GLOBALS['TL_LANG']['tl_championslists_item']['typen'] = array

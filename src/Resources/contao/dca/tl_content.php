@@ -6,7 +6,8 @@
 //$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslistType';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslist_alttemplate';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslist_filter';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['championslists'] = '{type_legend},type;{champions_legend},championslist,championslist_alttemplate,championslist_filter;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['championslists'] = '{type_legend},type,headline;{champions_legend},championslist,championslist_alttemplate,championslist_filter;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['champion'] = '{type_legend},type,headline;{champions_legend},championslist,championslist_alttemplate;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['championslistsMono'] = '{type_legend},type,headline,championslistType;{champions_legend},championslist,championslist_alttemplate,championslist_filter;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['championslistsMulti'] = '{type_legend},type,headline,championslistType;{champions_legend},championslist,championslist_alttemplate,championslist_filter;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 //
@@ -21,36 +22,36 @@ $GLOBALS['TL_DCA']['tl_content']['subpalettes']['championslist_filter'] = 'champ
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['championslistType'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['championslistType'],
-	'default'                 => 'championslistsMono',
-	'exclude'                 => true,
-	'inputType'               => 'radio',
-	'options'                 => array('championslistsMono', 'championslistsMulti'),
-	//'reference'               => &$GLOBALS['TL_LANG']['tl_content']['championslistControl'],
-	'eval'                    => array
+	'label'                    => &$GLOBALS['TL_LANG']['tl_content']['championslistType'],
+	'default'                  => 'championslistsMono',
+	'exclude'                  => true,
+	'inputType'                => 'radio',
+	'options'                  => array('championslistsMono', 'championslistsMulti'),
+	//'reference'                => &$GLOBALS['TL_LANG']['tl_content']['championslistControl'],
+	'eval'                     => array
 	(
-		'helpwizard'          => true,
-		'submitOnChange'      => true,
-		'tl_class'            => 'clr'
+		'helpwizard'           => true,
+		'submitOnChange'       => true,
+		'tl_class'             => 'clr'
 	),
-	'sql'                     => "varchar(20) NOT NULL default ''"
+	'sql'                      => "varchar(20) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['championslist'] = array
 (
-	'label'                => &$GLOBALS['TL_LANG']['tl_content']['championslist'],
-	'exclude'              => true,
-	'options_callback'     => array('tl_content_championslist', 'getChampionslists'),
-	'inputType'            => 'select',
-	'eval'                 => array
+	'label'                    => &$GLOBALS['TL_LANG']['tl_content']['championslist'],
+	'exclude'                  => true,
+	'options_callback'         => array('tl_content_championslist', 'getChampionslists'),
+	'inputType'                => 'select',
+	'eval'                     => array
 	(
-		'mandatory'      => false,
-		'multiple'       => false,
-		'chosen'         => true,
-		'submitOnChange' => true,
-		'tl_class'       => 'w50 wizard widget'
+		'mandatory'            => false,
+		'multiple'             => false,
+		'chosen'               => true,
+		'submitOnChange'       => true,
+		'tl_class'             => 'w50 wizard widget'
 	),
-	'wizard'               => array
+	'wizard'                   => array
 	(
 		array('tl_content_championslist', 'editListe')
 	),
@@ -59,11 +60,11 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['championslist'] = array
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['championslist_alttemplate'] = array
 (
-	'label'         => &$GLOBALS['TL_LANG']['tl_content']['championslist_alttemplate'],
-	'exclude'       => true,
-	'inputType'     => 'checkbox',
-	'eval'          => array('tl_class'=>'clr','isBoolean' => true,'submitOnChange'=>true),
-	'sql'           => "char(1) NOT NULL default ''",
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['championslist_alttemplate'],
+	'exclude'                 => true,
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'clr','isBoolean' => true,'submitOnChange'=>true),
+	'sql'                     => "char(1) NOT NULL default ''",
 );
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['championstemplate'] = array
@@ -143,17 +144,18 @@ class tl_content_championslist extends \Backend
 
 	public function getTemplates($dc)
 	{
+
+		$template_prefix = $dc->activeRecord->type == 'champion' ? 'ce_champion_' : 'mod_championslists_';
+		
 		if(version_compare(VERSION.BUILD, '2.9.0', '>=') && version_compare(VERSION.BUILD, '4.8.0', '<'))
 		{
 			// Den 2. Parameter gibt es nur ab Contao 2.9 bis 4.7
-			return $this->getTemplateGroup('mod_championslists_', $dc->activeRecord->id);
+			return $this->getTemplateGroup($template_prefix, $dc->activeRecord->id);
 		}
 		else
 		{
-			return $this->getTemplateGroup('mod_championslists_');
+			return $this->getTemplateGroup($template_prefix);
 		}
 	}
 
 }
-
-?>

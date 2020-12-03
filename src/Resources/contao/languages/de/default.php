@@ -1,6 +1,4 @@
 <?php
 
-$GLOBALS['TL_LANG']['CTE']['championslists']['0'] = "Meisterliste";
-$GLOBALS['TL_LANG']['CTE']['championslists']['1'] = "Eine Meisterliste einfügen";
-
-?>
+$GLOBALS['TL_LANG']['CTE']['championslists'] = array('Meisterliste', 'Eine Meisterliste einfügen');
+$GLOBALS['TL_LANG']['CTE']['champion'] = array('Aktueller Meister', 'Eine aktuellen Meister aus einer Meisterliste einfügen');
