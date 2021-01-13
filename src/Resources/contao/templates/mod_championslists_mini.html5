@@ -1,0 +1,15 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<table class="championslist_mini">
+<?php foreach($this->item as $item): ?>
+	<tr class="item <?php echo $item['class']; ?>">
+		<td><?php echo $item['year']; ?></td>
+		<td><?php echo $item['place']; ?></td>
+		<td><?php echo $item['name']; ?></td>
+	</tr>
+<?php endforeach; ?>
+</table>
+
+<?php $this->endblock(); ?> 

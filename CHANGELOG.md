@@ -1,5 +1,9 @@
 # Meisterliste Changelog
 
+## Version 2.0.1 (2021-01-13)
+
+* Add: Template mod_championslist_mini
+
 ## Version 2.0.0 (2020-12-03)
 
 * Fix: tl_championslist_items Funktion checkPalette berücksichtigte keine weiblichen Mannschaftsturniere bei der Palettenmanipulation
