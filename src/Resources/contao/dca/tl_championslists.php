@@ -51,6 +51,13 @@ $GLOBALS['TL_DCA']['tl_championslists'] = array
 		),
 		'global_operations' => array
 		(
+			'kategorien' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_championslists']['kategorien'],
+				'href'                => 'table=tl_championslists_categories',
+				'icon'                => 'bundles/contaochampionslists/images/kategorien.png',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],

@@ -26,16 +26,18 @@ $GLOBALS['TL_LANG']['tl_championslists_items']['target'][1] = 'Link im neuen Fen
 $GLOBALS['TL_LANG']['tl_championslists_items']['person1_legend'] = 'Angaben zum Turniersieger';
 $GLOBALS['TL_LANG']['tl_championslists_items']['name'] = array('Name', 'Name der Person');
 $GLOBALS['TL_LANG']['tl_championslists_items']['age'] = array('Alter', 'Alter der Person');
-$GLOBALS['TL_LANG']['tl_championslists_items']['clubrating'] = array('Verein und Wertungszahl', 'Verein und Wertungszahl');
+$GLOBALS['TL_LANG']['tl_championslists_items']['verein'] = array('Verein/Ort', 'Verein/Ort');
+$GLOBALS['TL_LANG']['tl_championslists_items']['rating'] = array('Wertungszahl', 'Wertungszahl');
+$GLOBALS['TL_LANG']['tl_championslists_items']['clubrating'] = array('Verein und Wertungszahl (NICHT MEHR VERWENDEN!)', 'Verein und Wertungszahl');
 $GLOBALS['TL_LANG']['tl_championslists_items']['cowinner'] = array('Co-Sieger', 'Gemeinsamer Gewinner. Erlaubt Alternativdarstellung/Ausblendung im Template.');
 $GLOBALS['TL_LANG']['tl_championslists_items']['singleSRC'] = array('Bild', 'Bild/Logo hinzufügen');
 $GLOBALS['TL_LANG']['tl_championslists_items']['spielerregister_id'] = array('Eintrag im Spielerregister', 'Eintrag im Spielerregister');
 
-$GLOBALS['TL_LANG']['tl_championslists_items']['person2_legend'] = 'Angaben zur 2. Person';
-$GLOBALS['TL_LANG']['tl_championslists_items']['person3_legend'] = 'Angaben zur 3. Person';
-$GLOBALS['TL_LANG']['tl_championslists_items']['person4_legend'] = 'Angaben zur 4. Person';
-$GLOBALS['TL_LANG']['tl_championslists_items']['person5_legend'] = 'Angaben zur 5. Person';
-$GLOBALS['TL_LANG']['tl_championslists_items']['person6_legend'] = 'Angaben zur 6. Person';
+$GLOBALS['TL_LANG']['tl_championslists_items']['person2_legend'] = 'Angaben zur 2. Person (NICHT MEHR VERWENDEN!)';
+$GLOBALS['TL_LANG']['tl_championslists_items']['person3_legend'] = 'Angaben zur 3. Person (NICHT MEHR VERWENDEN!)';
+$GLOBALS['TL_LANG']['tl_championslists_items']['person4_legend'] = 'Angaben zur 4. Person (NICHT MEHR VERWENDEN!)';
+$GLOBALS['TL_LANG']['tl_championslists_items']['person5_legend'] = 'Angaben zur 5. Person (NICHT MEHR VERWENDEN!)';
+$GLOBALS['TL_LANG']['tl_championslists_items']['person6_legend'] = 'Angaben zur 6. Person (NICHT MEHR VERWENDEN!)';
 
 $GLOBALS['TL_LANG']['tl_championslists_items']['extra_legend'] = 'Zusätzliche Angaben';
 $GLOBALS['TL_LANG']['tl_championslists_items']['name2'] = array('Name', 'Name der Person');
@@ -76,3 +78,15 @@ $GLOBALS['TL_LANG']['tl_championslists_item']['typen'] = array
 	3 => 'Frauen 1. Platz',
 	4 => 'Nestoren 1. Platz'
 );
+
+// MCW
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_legend'] = 'Weitere Platzierungen';
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen'] = array('Platzierungen', 'Platzierungen bearbeiten');
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_platz'] = array('Platz', 'Platzname');
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_name'] = array('Name', 'Vorname Name');
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_alter'] = array('Alter (nur Einzel)', 'Alter in Jahren');
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_verein'] = array('Verein/Ort (nur Einzel)', 'Verein/Ort');
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_rating'] = array('Wertungszahl (nur Einzel)', 'DWZ, Elo oder andere Wertungszahl');
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_image'] = array('Bild', 'Bild einbinden');
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_spielerregister'] = array('Spielerregister (nur Einzel)', 'Eintrag im Spielerregister');
+$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_aufstellung'] = array('Aufstellung (nur Mannschaften)', 'Aufstellung (nur Mannschaften)');

@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('person2', 'person3', 'person4', 'person5', 'person6'),
-		'default'                     => '{place_legend},year,number,place,url,target;{info_legend},info;{person1_legend},name,age,clubrating,cowinner,singleSRC,spielerregister_id;{person2_legend},person2;{person3_legend},person3;{person4_legend},person4;{person5_legend},person5;{person6_legend},person6;{publish_legend},published'
+		'default'                     => '{place_legend},year,number,place,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,clubrating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{person2_legend},person2;{person3_legend},person3;{person4_legend},person4;{person5_legend},person5;{person6_legend},person6;{publish_legend},published'
 	),
 
 	// Subpalettes
@@ -174,10 +174,15 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'url', 'decodeEntities'=>true, 'maxlength'=>255, 'fieldType'=>'radio', 'tl_class'=>'clr w50 wizard'),
-			'wizard' => array
+			'eval'                    => array
 			(
-				array('tl_championslists_items', 'pagePicker')
+				'mandatory'           => false,
+				'rgxp'                => 'url',
+				'decodeEntities'      => true,
+				'maxlength'           => 255,
+				'dcaPicker'           => true,
+				'addWizardClass'      => false,
+				'tl_class'            => 'w50'
 			),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
@@ -218,6 +223,26 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
+		'verein' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['verein'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>40, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(40) NOT NULL default ''"
+		),
+		'rating' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['rating'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'flag'                    => 1,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>40, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(40) NOT NULL default ''"
+		),
 		'cowinner' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['cowinner'],
@@ -250,6 +275,133 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 				'tl_class'            => 'long'
 			),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
+		'platzierungen' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval'                    => array
+			(
+				'tl_class'            => 'long',
+				'buttonPos'           => 'top',
+				'columnFields'        => array
+				(
+					'platz' => array
+					(
+						'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_platz'],
+						'exclude'                 => true,
+						'inputType'               => 'select',
+						'foreignKey'              => 'tl_championslists_categories.title',
+						'eval'                    => array
+						(
+							'includeBlankOption'  => true,
+							'columnPos'           => 'spalte1',
+							'valign'              => 'top',
+							'style'               => 'width:180px'
+						),
+					),
+					'name' => array
+					(
+						'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_name'],
+						'exclude'                 => true,
+						'inputType'               => 'text',
+						'eval'                    => array
+						(
+							'maxlength'           => 40,
+							'columnPos'           => 'spalte2',
+							'valign'              => 'top',
+							'style'               => 'width:350px'
+						),
+					),
+					'verein' => array
+					(
+						'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_verein'],
+						'exclude'                 => true,
+						'inputType'               => 'text',
+						'eval'                    => array
+						(
+							'maxlength'           => 40,
+							'columnPos'           => 'spalte3',
+							'valign'              => 'top',
+							'style'               => 'width:250px'
+						),
+					),
+					'alter' => array
+					(
+						'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_alter'],
+						'exclude'                 => true,
+						'inputType'               => 'text',
+						'eval'                    => array
+						(
+							'maxlength'           => 40,
+							'columnPos'           => 'spalte3',
+							'valign'              => 'top',
+							'style'               => 'width:100px'
+						),
+					),
+					'rating' => array
+					(
+						'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_rating'],
+						'exclude'                 => true,
+						'inputType'               => 'text',
+						'eval'                    => array
+						(
+							'maxlength'           => 40,
+							'columnPos'           => 'spalte3',
+							'valign'              => 'top',
+							'style'               => 'width:100px'
+						),
+					),
+					'image' => array
+					(
+						'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_image'],
+						'exclude'                 => true,
+						'inputType'               => 'fileTree',
+						'eval'                    => array
+						(
+							'filesOnly'           => true,
+							'fieldType'           => 'radio',
+							'columnPos'           => 'spalte4',
+							'valign'              => 'top',
+							'style'               => 'width:250px'
+						),
+					),
+					'spielerregister' => array
+					(
+						'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_spielerregister'],
+						'exclude'                 => true,
+						'options_callback'        => array('\Schachbulle\ContaoSpielerregisterBundle\Klassen\Helper', 'getRegister'),
+						'inputType'               => 'select',
+						'eval'                    => array
+						(
+							'mandatory'           => false,
+							'multiple'            => false,
+							'chosen'              => true,
+							'submitOnChange'      => false,
+							'includeBlankOption'  => true,
+							'columnPos'           => 'spalte2',
+							'valign'              => 'top',
+							'style'               => 'width:350px'
+						),
+					),
+					'aufstellung' => array
+					(
+						'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_aufstellung'],
+						'exclude'                 => true,
+						'search'                  => true,
+						'inputType'               => 'textarea',
+						'eval'                    => array
+						(
+							'class'               => 'noresize',
+							'columnPos'           => 'spalte2',
+							'style'               => 'width:350px'
+						),
+						'explanation'             => 'insertTags',
+					),
+				)
+			),
+			'sql'                     => "blob NULL"
 		),
 		'person2' => array
 		(
@@ -689,6 +841,23 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 	)
 );
 
+// Listentyp mittels Abfrage ermitteln
+//$GLOBALS['championslist-typ'] = 'E';
+//$objItem = \Database::getInstance()->prepare("SELECT pid FROM tl_championslists_items WHERE id=?")
+//                                   ->limit(1)
+//                                   ->execute($dc->id);
+//$objListe = \Database::getInstance()->prepare("SELECT typ FROM tl_championslists WHERE id=?")
+//                                    ->limit(1)
+//                                    ->execute($objItem->pid);
+//
+//if($objListe->typ == 'M' || $objListe->typ == 'W') $GLOBALS['championslist-typ'] = $objListe->typ;
+//
+//// DCA ändern, wenn Mannschaftseingabe
+//if($GLOBALS['championslist-typ'] == 'M' || $GLOBALS['championslist-typ'] == 'W')
+//{
+//	$GLOBALS['TL_DCA']['tl_championslists_items']['fields']['platzierungen']['eval']['columnFields']['alter'] = array();
+//}
+
 /**
  * Class tl_championslists_items
  *
@@ -779,18 +948,11 @@ class tl_championslists_items extends Backend
 		$this->createNewVersion('tl_championslists_items', $intId);
 	}
 
-	/**
-	 * Return the link picker wizard
-	 * @param \DataContainer
-	 * @return string
-	 */
-	public function pagePicker(DataContainer $dc)
-	{
-		return ' <a href="contao/page.php?do=' . Input::get('do') . '&amp;table=' . $dc->table . '&amp;field=' . $dc->field . '&amp;value=' . str_replace(array('{{link_url::', '}}'), '', $dc->value) . '" title="' . specialchars($GLOBALS['TL_LANG']['MSC']['pagepicker']) . '" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\'' . specialchars(str_replace("'", "\\'", $GLOBALS['TL_LANG']['MOD']['page'][0])) . '\',\'url\':this.href,\'id\':\'' . $dc->field . '\',\'tag\':\'ctrl_'. $dc->field . ((Input::get('act') == 'editAll') ? '_' . $dc->id : '') . '\',\'self\':this});return false">' . Image::getHtml('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top;cursor:pointer"') . '</a>';
-	}
 
 	public function listPersons($arrRow)
 	{
+		$kategorien = \Schachbulle\ContaoChampionslistsBundle\Classes\Helper::getTitles();
+
 		$temp = '<div class="tl_content_left"><b>'.$arrRow['year'].'</b> ';
 		if($arrRow['number']) $temp .= '['.$arrRow['number'].'] ';
 		if($arrRow['place']) $temp .= $arrRow['place'].' - ';
@@ -801,14 +963,14 @@ class tl_championslists_items extends Backend
 			if($arrRow['singleSRC']) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
 			if($arrRow['spielerregister_id']) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
 			// Restliche Spieler ausgeben
-			for($nr = 2; $nr <= 6; $nr++)
+			if($arrRow['platzierungen'])
 			{
-				if($arrRow['person'.$nr])
+				$platzierungen = unserialize($arrRow['platzierungen']);
+				foreach($platzierungen as $platz)
 				{
-					$typname = $GLOBALS['TL_LANG']['tl_championslists_item']['typen'][$arrRow['typ'.$nr]];
-					$temp .= ' | <b>'.$arrRow['name'.$nr].'</b> (<i>'.$typname.'</i>) ';
-					if($arrRow['singleSRC'.$nr]) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
-					if($arrRow['spielerregister_id'.$nr]) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
+					$temp .= ' | <b>'.$platz['name'].'</b> (<i>'.$kategorien[$platz['platz']].'</i>) ';
+					if($platz['image']) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
+					if($platz['spielerregister']) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
 				}
 			}
 		}
@@ -816,10 +978,15 @@ class tl_championslists_items extends Backend
 		{
 			if($arrRow['singleSRC']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
 			// Restliche Mannschaften ausgeben
-			if($arrRow['name2']) $temp .= ' 2. <b>'.$arrRow['name2'].'</b> ';
-			if($arrRow['singleSRC2']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
-			if($arrRow['name3']) $temp .= ' 3. <b>'.$arrRow['name3'].'</b> ';
-			if($arrRow['singleSRC3']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
+			if($arrRow['platzierungen'])
+			{
+				$platzierungen = unserialize($arrRow['platzierungen']);
+				foreach($platzierungen as $platz)
+				{
+					$temp .= ' | <b>'.$platz['name'].'</b> (<i>'.$kategorien[$platz['platz']].'</i>) ';
+					if($platz['image']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
+				}
+			}
 		}
 
 		return $temp.'</div>';

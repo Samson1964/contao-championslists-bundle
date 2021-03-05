@@ -1,0 +1,48 @@
+<?php
+	$GLOBALS['TL_CSS'][] = 'bundles/contaochampionslists/css/default.css';
+?>
+
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<?php foreach($this->item as $item): ?>
+
+	<div class="item <?= $item['class'] ?>">
+
+		<div class="titel">
+			<?php if($item['nummer']): ?><span class="nummer"><?= $item['nummer'].'.' ?></span><?php endif; ?>
+			<?php if($item['linkurl']): ?>
+				<a href="<?= $item['linkurl'] ?>"<?php if($item['linkziel']): ?> target="_blank"<?php endif; ?>>
+			<?php endif; ?>
+				<span class="jahr_ort">
+					<?= $item['jahr'] ?>
+					<?php if($item['ort']): ?> <?= $item['ort'] ?><?php endif; ?>
+				</span>
+			<?php if($item['linkurl']): ?>
+				</a>
+			<?php endif; ?>
+		</div>
+
+		<div class="info">
+			<figure class="image_container float_left">
+				<a href="<?= $item['platz']['meister']['image'] ?>" data-lightbox="championslists<?= $item['id'] ?>"><img src="<?= $item['platz']['meister']['thumbnail'] ?>" alt="<?= $item['platz']['meister']['imageAlt'] ?>" title="<?= $item['platz']['meister']['imageTitle'] ?>"<?= $item['platz']['meister']['imageSize'] ?>></a>
+				<?php if ($item['platz']['meister']['imageCaption']): ?>
+					<figcaption class="caption"><?= $item['platz']['meister']['imageCaption'] ?></figcaption>
+				<?php endif; ?>
+			</figure> 
+			<p class="mannschaft">
+				<span class="name"><?= $item['platz']['meister']['name']; ?></span>
+				<span class="aufstellung"><?= $item['platz']['meister']['aufstellung']; ?></span>
+			</p>
+			<?php if($item['info']): ?>
+				<p class="text"><?= $item['info'] ?></p>
+			<?php endif; ?>
+		</div>
+		<div style="clear:both;"></div>
+
+	</div>
+
+<?php endforeach; ?>
+
+<?php $this->endblock(); ?>

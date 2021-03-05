@@ -13,7 +13,7 @@
 
 $GLOBALS['BE_MOD']['content']['championslists'] = array
 (
-	'tables'         => array('tl_championslists', 'tl_championslists_items'),
+	'tables'         => array('tl_championslists', 'tl_championslists_categories', 'tl_championslists_items'),
 	'icon'           => 'bundles/contaochampionslists/images/icon.png',
 );
 
@@ -22,5 +22,6 @@ $GLOBALS['BE_MOD']['content']['championslists'] = array
  * CONTENT ELEMENTS
  * -------------------------------------------------------------------------
  */
-$GLOBALS['TL_CTE']['schach']['championslists'] = 'Schachbulle\ContaoChampionslistsBundle\ContentElements\Championslist';
+$GLOBALS['TL_CTE']['schach']['championslists_mono'] = 'Schachbulle\ContaoChampionslistsBundle\ContentElements\ChampionslistsMono';
+$GLOBALS['TL_CTE']['schach']['championslists_multi'] = 'Schachbulle\ContaoChampionslistsBundle\ContentElements\ChampionslistsMulti';
 $GLOBALS['TL_CTE']['schach']['champion'] = 'Schachbulle\ContaoChampionslistsBundle\ContentElements\Champion';

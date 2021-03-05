@@ -1,5 +1,20 @@
 # Meisterliste Changelog
 
+## Version 3.0.0 (2021-03-05)
+
+* Add: Kategorien-Tabelle für Platzierungsnamen (Platzierung "meister" ist reserviert und wird automatisch verwaltet)
+* Add: Abhängigkeit menatwork/contao-multicolumnwizard-bundle
+* Add: Normale Formularfelder mit MCW für Eingabe weiterer Platzierungen
+* Change: Spalte clubrating aufgeteilt in verein und rating. Runonce schreibt Wert in verein.
+* Add: runonce.php (und runonce_org.php) für einmalige Tabellenaktualisierung
+* Change: tl_championslists_items - PagePicker durch DcaPicker ersetzt
+* Change: tl_content umgestellt auf customTpl und Einzel- und Mannschaftswettbewerbe getrennt
+* Change: Templates umbenannt/überarbeitet - ce_championslists_mono (vorher mod_championslists_single), ce_championslists_mono_mini (vorher mod_championslists_mini), ce_championslists_multi (vorher mod_championslists_team)
+* Delete: ContentElements/Championslist.php (ersetzt durch ChampionslistsMono und ChampionslistsMulti)
+* Add: ContentElements/ChampionslistsMono und ContentElements/ChampionslistsMulti
+* Add: Standard-CSS, was im Template eingebunden wird
+* Add: Helper-Klasse
+
 ## Version 2.0.1 (2021-01-13)
 
 * Add: Template mod_championslist_mini

@@ -8,6 +8,7 @@
 
 // Listenansicht
 $GLOBALS['TL_LANG']['tl_championslists']['new'] = array('Neue Liste', 'Neue Liste anlegen');
+$GLOBALS['TL_LANG']['tl_championslists']['kategorien'] = array('Platzierungsnamen', 'Platzierungsnamen bearbeiten');
 
 // Eingabemaske
 $GLOBALS['TL_LANG']['tl_championslists']['title_legend'] = 'Titel';

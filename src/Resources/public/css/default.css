@@ -1,0 +1,97 @@
+/* ********************************************************* */
+/* Meisterlisten                                             */
+/* ********************************************************* */
+
+.ce_championslists_mono div.item {
+	border-left:1px solid #EBEBEB;
+	border-top:1px solid #EBEBEB;
+	border-right:1px solid #D2D2D2;
+	border-bottom:1px solid #D2D2D2;
+	margin-bottom: 10px;
+	border-radius: 5px;
+}
+
+.ce_championslists_mono div.titel {
+}
+
+.ce_championslists_mono span.nummer {
+	font-weight: bold;
+}
+
+.ce_championslists_mono span.jahr_ort {
+	padding-left: 5px;
+	font-weight: bold;
+	color: #001821;
+}
+
+.ce_championslists_mono p.text {
+	margin-top: 5px;
+}
+
+.ce_championslists_mono span.name {
+	font-size: 20px;
+	font-weight: bold;
+	color: #841300;
+}
+
+.ce_championslists_mono span.verein {
+	font-style:normal;
+	color: #001821;
+}
+
+.ce_championslists_mono div.info {
+	margin-bottom: 0;
+	text-align: left;
+	font-size: 15px;
+	line-height: 17px;
+	color: #383838;
+	width: 100%;
+}
+
+.ce_championslists_multi div.item {
+	border-left:1px solid #EBEBEB;
+	border-top:1px solid #EBEBEB;
+	border-right:1px solid #D2D2D2;
+	border-bottom:1px solid #D2D2D2;
+	margin-bottom: 10px;
+	border-radius: 5px;
+}
+
+.ce_championslists_multi div.titel {
+}
+
+.ce_championslists_multi span.nummer {
+	font-weight: bold;
+}
+
+.ce_championslists_multi span.jahr_ort {
+	padding-left: 5px;
+	font-weight: bold;
+	color: #001821;
+}
+
+.ce_championslists_multi p.text {
+	margin-top: 5px;
+}
+
+.ce_championslists_multi span.name {
+	font-size: 20px;
+	font-weight: bold;
+	color: #841300;
+}
+
+.ce_championslists_multi span.aufstellung {
+	font-style:normal;
+	display: block;
+	padding-top: 5px;
+	color: #001821;
+}
+
+.ce_championslists_multi div.info {
+	margin-bottom: 0;
+	text-align: left;
+	font-size: 15px;
+	line-height: 17px;
+	color: #383838;
+	width: 100%;
+}
