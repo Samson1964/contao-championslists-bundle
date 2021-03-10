@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'mode'                    => 4,
 			'disableGrouping'         => true,
 			'fields'                  => array('year DESC'),
-			'headerFields'            => array('title', 'typ', 'templatefile'),
+			'headerFields'            => array('title', 'typ'),
 			'panelLayout'             => 'filter;sort,search,limit',
 			'child_record_callback'   => array('tl_championslists_items', 'listPersons'),
 		),
@@ -548,7 +548,6 @@ class tl_championslists_items extends Backend
 				$platzierungen = unserialize($arrRow['platzierungen']);
 				if($platzierungen)
 				{
-					print_r($platzierungen);
 					foreach($platzierungen as $platz)
 					{
 						if($platz['platz'])

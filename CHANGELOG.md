@@ -1,5 +1,10 @@
 # Meisterliste Changelog
 
+## Version 3.1.1 (2021-03-10)
+
+* Fix: print_r in tl_championslists_item entfernt
+* Fix: Standardtemplate im Backend-Header entfernt
+
 ## Version 3.1.0 (2021-03-10)
 
 * Delete: Standardtemplate in Meisterlisten Backend - tl_championslists.templatefile
