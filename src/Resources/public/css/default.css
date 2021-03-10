@@ -21,7 +21,6 @@
 .ce_championslists_mono span.jahr_ort {
 	padding-left: 5px;
 	font-weight: bold;
-	color: #001821;
 }
 
 .ce_championslists_mono p.text {
@@ -67,7 +66,6 @@
 .ce_championslists_multi span.jahr_ort {
 	padding-left: 5px;
 	font-weight: bold;
-	color: #001821;
 }
 
 .ce_championslists_multi p.text {
@@ -95,3 +93,22 @@
 	color: #383838;
 	width: 100%;
 }
+
+.ce_championslists_mono figure,
+.ce_championslists_multi figure {
+	margin-right: 5px;
+	width: 120px;
+	display: table;
+}
+
+.ce_championslists_mono figure img,
+.ce_championslists_multi figure img {
+	display: block;
+	width: 100%;
+}
+
+.ce_championslists_mono figcaption,
+.ce_championslists_multi figcaption {
+	display: table-caption;
+	caption-side: bottom;
+} 

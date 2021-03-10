@@ -73,6 +73,9 @@ class ChampionslistsMulti extends \ContentElement
 						default:
 					}
 
+					// Kategorien laden
+					$kategorien = \Schachbulle\ContaoChampionslistsBundle\Classes\Helper::getAliase();
+
 					$i = 0;
 					while($objItems->next())
 					{

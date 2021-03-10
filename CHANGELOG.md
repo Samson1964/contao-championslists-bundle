@@ -1,5 +1,14 @@
 # Meisterliste Changelog
 
+## Version 3.1.0 (2021-03-10)
+
+* Delete: Standardtemplate in Meisterlisten Backend - tl_championslists.templatefile
+* Fix: Platzierungen werden in Mannschaftsturnieren nicht im Template ausgegeben
+* Fix: Korrekturen in default.css - Farbe Jahr/Ort, figure/figcaption-Positionierung
+* Delete: tl_championslists_items überflüssige Felder entfernt
+* Add: Meisterschaft verlinkt ja/nein in Backend anzeigen   
+* Fix: Bei leeren Platzierungen nicht "()" im Backend anzeigen
+
 ## Version 3.0.0 (2021-03-05)
 
 * Add: Kategorien-Tabelle für Platzierungsnamen (Platzierung "meister" ist reserviert und wird automatisch verwaltet)

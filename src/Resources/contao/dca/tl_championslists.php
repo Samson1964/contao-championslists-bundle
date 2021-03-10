@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_championslists'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title,alias;{options_legend},typ;{template_legend},templatefile;{publish_legend},published'
+		'default'                     => '{title_legend},title,alias;{options_legend},typ;{publish_legend},published'
 	),
 
 	// Fields
@@ -159,16 +159,6 @@ $GLOBALS['TL_DCA']['tl_championslists'] = array
 			),
 			'sql'                     => "char(1) NOT NULL default ''"
 		),  
-		'templatefile' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists']['templatefile'],
-			'exclude'                 => true,
-			'filter'                  => true,
-			'inputType'               => 'select',
-			'options_callback'        => array('tl_championslists', 'getTemplates'),
-			'eval'                    => array('tl_class'=>'w50'),
-			'sql'                     => "varchar(64) NOT NULL default ''"
-		), 
 		'published' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists']['published'],

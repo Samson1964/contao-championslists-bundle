@@ -107,18 +107,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'__selector__'                => array('person2', 'person3', 'person4', 'person5', 'person6'),
-		'default'                     => '{place_legend},year,number,place,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,clubrating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{person2_legend},person2;{person3_legend},person3;{person4_legend},person4;{person5_legend},person5;{person6_legend},person6;{publish_legend},published'
-	),
-
-	// Subpalettes
-	'subpalettes' => array
-	(
-		'person2'                     => 'typ2,name2,age2,clubrating2,singleSRC2,spielerregister_id2',
-		'person3'                     => 'typ3,name3,age3,clubrating3,singleSRC3,spielerregister_id3',
-		'person4'                     => 'typ4,name4,age4,clubrating4,singleSRC4,spielerregister_id4',
-		'person5'                     => 'typ5,name5,age5,clubrating5,singleSRC5,spielerregister_id5',
-		'person6'                     => 'typ6,name6,age6,clubrating6,singleSRC6,spielerregister_id6'
+		'default'                     => '{place_legend},year,number,place,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{publish_legend},published'
 	),
 
 	// Fields
@@ -212,16 +201,6 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'maxlength'=>5),
 			'sql'                     => "varchar(5) NOT NULL default ''"
-		),
-		'clubrating' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['clubrating'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'verein' => array
 		(
@@ -403,410 +382,9 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			),
 			'sql'                     => "blob NULL"
 		),
-		'person2' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['person2'],
-			'inputType'               => 'checkbox',
-			'filter'                  => true,
-			'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr'),
-			'sql'                     => "char(1) NOT NULL default ''"
-		),
-		'person3' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['person3'],
-			'inputType'               => 'checkbox',
-			'filter'                  => true,
-			'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr'),
-			'sql'                     => "char(1) NOT NULL default ''"
-		),
-		'person4' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['person4'],
-			'inputType'               => 'checkbox',
-			'filter'                  => true,
-			'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr'),
-			'sql'                     => "char(1) NOT NULL default ''"
-		),
-		'person5' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['person5'],
-			'inputType'               => 'checkbox',
-			'filter'                  => true,
-			'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr'),
-			'sql'                     => "char(1) NOT NULL default ''"
-		),
-		'person6' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['person6'],
-			'inputType'               => 'checkbox',
-			'filter'                  => true,
-			'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'clr'),
-			'sql'                     => "char(1) NOT NULL default ''"
-		),
-		'typ2' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['typ'],
-			'exclude'                 => true,
-			'default'                 => 1,
-			'search'                  => true,
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 12,
-			'inputType'               => 'select',
-			'eval'                    => array('includeBlankOption' => true),
-			'options'                 => $GLOBALS['TL_LANG']['tl_championslists_item']['typen'],
-			'sql'                     => "char(1) NOT NULL default '1'"
-		),
-		'name2' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['name2'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'age2' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['age'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'maxlength'=>5),
-			'sql'                     => "varchar(5) NOT NULL default ''"
-		),
-		'clubrating2' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['clubrating'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'singleSRC2' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['singleSRC'],
-			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'tl_class'=>'clr'),
-			'sql'                     => "binary(16) NULL",
-		),
-		'spielerregister_id2' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['spielerregister_id'],
-			'exclude'                 => true,
-			'options_callback'        => array('tl_championslists_items', 'getRegisterliste'),
-			'inputType'               => 'select',
-			'eval'                    => array
-			(
-				'mandatory'           => false,
-				'multiple'            => false,
-				'chosen'              => true,
-				'submitOnChange'      => false,
-				'tl_class'            => 'long'
-			),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
-		),
-		'typ3' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['typ'],
-			'exclude'                 => true,
-			'default'                 => 1,
-			'search'                  => true,
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 12,
-			'eval'                    => array('includeBlankOption' => true),
-			'inputType'               => 'select',
-			'options'                 => $GLOBALS['TL_LANG']['tl_championslists_item']['typen'],
-			'sql'                     => "char(1) NOT NULL default '1'"
-		),
-		'name3' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['name3'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'age3' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['age'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'maxlength'=>5),
-			'sql'                     => "varchar(5) NOT NULL default ''"
-		),
-		'clubrating3' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['clubrating'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'singleSRC3' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['singleSRC'],
-			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'tl_class'=>'clr'),
-			'sql'                     => "binary(16) NULL",
-		),
-		'spielerregister_id3' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['spielerregister_id'],
-			'exclude'                 => true,
-			'options_callback'        => array('tl_championslists_items', 'getRegisterliste'),
-			'inputType'               => 'select',
-			'eval'                    => array
-			(
-				'mandatory'           => false,
-				'multiple'            => false,
-				'chosen'              => true,
-				'submitOnChange'      => false,
-				'tl_class'            => 'long'
-			),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
-		),
-		'typ4' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['typ'],
-			'exclude'                 => true,
-			'default'                 => 1,
-			'search'                  => true,
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 12,
-			'eval'                    => array('includeBlankOption' => true),
-			'inputType'               => 'select',
-			'options'                 => $GLOBALS['TL_LANG']['tl_championslists_item']['typen'],
-			'sql'                     => "char(1) NOT NULL default '1'"
-		),
-		'name4' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['name4'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'age4' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['age'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'maxlength'=>5),
-			'sql'                     => "varchar(5) NOT NULL default ''"
-		),
-		'clubrating4' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['clubrating'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'singleSRC4' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['singleSRC'],
-			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'tl_class'=>'clr'),
-			'sql'                     => "binary(16) NULL",
-		),
-		'spielerregister_id4' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['spielerregister_id'],
-			'exclude'                 => true,
-			'options_callback'        => array('tl_championslists_items', 'getRegisterliste'),
-			'inputType'               => 'select',
-			'eval'                    => array
-			(
-				'mandatory'           => false,
-				'multiple'            => false,
-				'chosen'              => true,
-				'submitOnChange'      => false,
-				'tl_class'            => 'long'
-			),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
-		),
-		'typ5' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['typ'],
-			'exclude'                 => true,
-			'default'                 => 1,
-			'search'                  => true,
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 12,
-			'eval'                    => array('includeBlankOption' => true),
-			'inputType'               => 'select',
-			'options'                 => $GLOBALS['TL_LANG']['tl_championslists_item']['typen'],
-			'sql'                     => "char(1) NOT NULL default '1'"
-		),
-		'name5' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['name5'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'age5' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['age'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'maxlength'=>5),
-			'sql'                     => "varchar(5) NOT NULL default ''"
-		),
-		'clubrating5' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['clubrating'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'singleSRC5' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['singleSRC'],
-			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'tl_class'=>'clr'),
-			'sql'                     => "binary(16) NULL",
-		),
-		'spielerregister_id5' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['spielerregister_id'],
-			'exclude'                 => true,
-			'options_callback'        => array('tl_championslists_items', 'getRegisterliste'),
-			'inputType'               => 'select',
-			'eval'                    => array
-			(
-				'mandatory'           => false,
-				'multiple'            => false,
-				'chosen'              => true,
-				'submitOnChange'      => false,
-				'tl_class'            => 'long'
-			),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
-		),
-		'typ6' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['typ'],
-			'exclude'                 => true,
-			'default'                 => 1,
-			'search'                  => true,
-			'filter'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 12,
-			'eval'                    => array('includeBlankOption' => true),
-			'inputType'               => 'select',
-			'options'                 => $GLOBALS['TL_LANG']['tl_championslists_item']['typen'],
-			'sql'                     => "char(1) NOT NULL default '1'"
-		),
-		'name6' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['name6'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'age6' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['age'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'maxlength'=>5),
-			'sql'                     => "varchar(5) NOT NULL default ''"
-		),
-		'clubrating6' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['clubrating'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'flag'                    => 1,
-			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
-		),
-		'singleSRC6' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['singleSRC'],
-			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'tl_class'=>'clr'),
-			'sql'                     => "binary(16) NULL",
-		),
-		'spielerregister_id6' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['spielerregister_id'],
-			'exclude'                 => true,
-			'options_callback'        => array('tl_championslists_items', 'getRegisterliste'),
-			'inputType'               => 'select',
-			'eval'                    => array
-			(
-				'mandatory'           => false,
-				'multiple'            => false,
-				'chosen'              => true,
-				'submitOnChange'      => false,
-				'tl_class'            => 'long'
-			),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
-		),
 		'nomination' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['nomination'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'textarea',
-			'eval'                    => array
-			(
-				'class'               => 'clr noresize',
-			),
-			'explanation'             => 'insertTags',
-			'sql'                     => "mediumtext NULL"
-		),
-		'nomination2' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['nomination2'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'textarea',
-			'eval'                    => array
-			(
-				'class'               => 'clr noresize',
-			),
-			'explanation'             => 'insertTags',
-			'sql'                     => "mediumtext NULL"
-		),
-		'nomination3' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['nomination3'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
@@ -954,6 +532,8 @@ class tl_championslists_items extends Backend
 		$kategorien = \Schachbulle\ContaoChampionslistsBundle\Classes\Helper::getTitles();
 
 		$temp = '<div class="tl_content_left"><b>'.$arrRow['year'].'</b> ';
+		if($arrRow['url']) $temp .= '<img src="bundles/contaochampionslists/images/link-add-icon.png" title="Link zur Detailseite vorhanden"> ';
+		else $temp .= '<img src="bundles/contaochampionslists/images/link-delete-icon.png" title="Link zur Detailseite nicht vorhanden"> ';
 		if($arrRow['number']) $temp .= '['.$arrRow['number'].'] ';
 		if($arrRow['place']) $temp .= $arrRow['place'].' - ';
 		if($arrRow['name']) $temp .= '1. <b style="color:#007500">'.$arrRow['name'].'</b> ';
@@ -966,11 +546,18 @@ class tl_championslists_items extends Backend
 			if($arrRow['platzierungen'])
 			{
 				$platzierungen = unserialize($arrRow['platzierungen']);
-				foreach($platzierungen as $platz)
+				if($platzierungen)
 				{
-					$temp .= ' | <b>'.$platz['name'].'</b> (<i>'.$kategorien[$platz['platz']].'</i>) ';
-					if($platz['image']) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
-					if($platz['spielerregister']) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
+					print_r($platzierungen);
+					foreach($platzierungen as $platz)
+					{
+						if($platz['platz'])
+						{
+							$temp .= ' | <b>'.$platz['name'].'</b> (<i>'.$kategorien[$platz['platz']].'</i>) ';
+							if($platz['image']) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
+							if($platz['spielerregister']) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
+						}
+					}
 				}
 			}
 		}
@@ -981,10 +568,16 @@ class tl_championslists_items extends Backend
 			if($arrRow['platzierungen'])
 			{
 				$platzierungen = unserialize($arrRow['platzierungen']);
-				foreach($platzierungen as $platz)
+				if($platzierungen)
 				{
-					$temp .= ' | <b>'.$platz['name'].'</b> (<i>'.$kategorien[$platz['platz']].'</i>) ';
-					if($platz['image']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
+					foreach($platzierungen as $platz)
+					{
+						if($platz['platz'])
+						{
+							$temp .= ' | <b>'.$platz['name'].'</b> (<i>'.$kategorien[$platz['platz']].'</i>) ';
+							if($platz['image']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
+						}
+					}
 				}
 			}
 		}
@@ -1011,32 +604,32 @@ class tl_championslists_items extends Backend
 		{
 			// Mannschaftsturnier männlich/weiblich
 			$GLOBALS['championslist-typ'] = $objListe->typ;
-			PaletteManipulator::create()
-			    ->removeField('age', 'person1_legend')
-			    ->removeField('clubrating', 'person1_legend')
-			    ->removeField('cowinner', 'person1_legend')
-			    ->removeField('spielerregister_id', 'person1_legend')
-			    ->removeField('person2', 'person2_legend')
-			    ->removeField('person3', 'person3_legend')
-			    ->removeField('person4', 'person4_legend')
-			    ->removeField('person5', 'person5_legend')
-			    ->removeField('person6', 'person6_legend')
-			    ->addField('nomination', 'singleSRC', PaletteManipulator::POSITION_AFTER)
-			    ->addLegend('person2_legend', 'person_legend', PaletteManipulator::POSITION_AFTER)
-			    ->addLegend('person3_legend', 'person2_legend', PaletteManipulator::POSITION_AFTER)
-			    ->addField('name2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
-			    ->addField('singleSRC2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
-			    ->addField('nomination2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
-			    ->addField('name3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
-			    ->addField('singleSRC3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
-			    ->addField('nomination3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
-			    ->applyToPalette('default', 'tl_championslists_items');
-			// Sprachvariablen anpassen
-			$GLOBALS['TL_LANG']['tl_championslists_items']['name'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name'];
-			$GLOBALS['TL_LANG']['tl_championslists_items']['name2'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name2'];
-			$GLOBALS['TL_LANG']['tl_championslists_items']['name3'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name3'];
-			$GLOBALS['TL_LANG']['tl_championslists_items']['person2_legend'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_person2_legend'];
-			$GLOBALS['TL_LANG']['tl_championslists_items']['person3_legend'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_person3_legend'];
+			//PaletteManipulator::create()
+			//    ->removeField('age', 'person1_legend')
+			//    ->removeField('clubrating', 'person1_legend')
+			//    ->removeField('cowinner', 'person1_legend')
+			//    ->removeField('spielerregister_id', 'person1_legend')
+			//    ->removeField('person2', 'person2_legend')
+			//    ->removeField('person3', 'person3_legend')
+			//    ->removeField('person4', 'person4_legend')
+			//    ->removeField('person5', 'person5_legend')
+			//    ->removeField('person6', 'person6_legend')
+			//    ->addField('nomination', 'singleSRC', PaletteManipulator::POSITION_AFTER)
+			//    ->addLegend('person2_legend', 'person_legend', PaletteManipulator::POSITION_AFTER)
+			//    ->addLegend('person3_legend', 'person2_legend', PaletteManipulator::POSITION_AFTER)
+			//    ->addField('name2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
+			//    ->addField('singleSRC2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
+			//    ->addField('nomination2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
+			//    ->addField('name3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
+			//    ->addField('singleSRC3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
+			//    ->addField('nomination3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
+			//    ->applyToPalette('default', 'tl_championslists_items');
+			//// Sprachvariablen anpassen
+			//$GLOBALS['TL_LANG']['tl_championslists_items']['name'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name'];
+			//$GLOBALS['TL_LANG']['tl_championslists_items']['name2'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name2'];
+			//$GLOBALS['TL_LANG']['tl_championslists_items']['name3'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name3'];
+			//$GLOBALS['TL_LANG']['tl_championslists_items']['person2_legend'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_person2_legend'];
+			//$GLOBALS['TL_LANG']['tl_championslists_items']['person3_legend'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_person3_legend'];
 		}
 
 	}
