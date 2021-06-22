@@ -7,21 +7,16 @@
  */
 
 // Listenansicht
-$GLOBALS['TL_LANG']['tl_championslists_items']['new'][0] = 'Neuer Eintrag';
-$GLOBALS['TL_LANG']['tl_championslists_items']['new'][1] = 'Neuen Eintrag anlegen';
+$GLOBALS['TL_LANG']['tl_championslists_items']['new'] = array('Neuer Eintrag', 'Neuen Eintrag anlegen');
 
 // Eingabemaske
 $GLOBALS['TL_LANG']['tl_championslists_items']['place_legend'] = 'Jahr und Ort';
-$GLOBALS['TL_LANG']['tl_championslists_items']['number'][0] = 'Nummer';
-$GLOBALS['TL_LANG']['tl_championslists_items']['number'][1] = 'Laufende Nummer der Veranstaltung';
-$GLOBALS['TL_LANG']['tl_championslists_items']['year'][0] = 'Jahr';
-$GLOBALS['TL_LANG']['tl_championslists_items']['year'][1] = 'Jahr der Veranstaltung';
-$GLOBALS['TL_LANG']['tl_championslists_items']['place'][0] = 'Ort';
-$GLOBALS['TL_LANG']['tl_championslists_items']['place'][1] = 'Ort der Veranstaltung';
-$GLOBALS['TL_LANG']['tl_championslists_items']['url'][0] = 'URL';
-$GLOBALS['TL_LANG']['tl_championslists_items']['url'][1] = 'Link zur Veranstaltung';
-$GLOBALS['TL_LANG']['tl_championslists_items']['target'][0] = 'Neues Fenster';
-$GLOBALS['TL_LANG']['tl_championslists_items']['target'][1] = 'Link im neuen Fenster öffnen';
+$GLOBALS['TL_LANG']['tl_championslists_items']['number'] = array('Nummer', 'Laufende Nummer der Veranstaltung');
+$GLOBALS['TL_LANG']['tl_championslists_items']['year'] = array('Jahr', 'Jahr der Veranstaltung');
+$GLOBALS['TL_LANG']['tl_championslists_items']['failed'] = array('Ausgefallen', 'Veranstaltung ist ausgefallen');
+$GLOBALS['TL_LANG']['tl_championslists_items']['place'] = array('Ort', 'Ort der Veranstaltung');
+$GLOBALS['TL_LANG']['tl_championslists_items']['url'] = array('URL', 'Link zur Veranstaltung');
+$GLOBALS['TL_LANG']['tl_championslists_items']['target'] = array('Neues Fenster', 'Link im neuen Fenster öffnen');
 
 $GLOBALS['TL_LANG']['tl_championslists_items']['person1_legend'] = 'Angaben zum Turniersieger';
 $GLOBALS['TL_LANG']['tl_championslists_items']['name'] = array('Name', 'Name der Person');

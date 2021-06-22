@@ -46,7 +46,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 		(
 			'mode'                    => 4,
 			'disableGrouping'         => true,
-			'fields'                  => array('year DESC'),
+			'fields'                  => array('year DESC', 'number ASC'),
 			'headerFields'            => array('title', 'typ'),
 			'panelLayout'             => 'filter;sort,search,limit',
 			'child_record_callback'   => array('tl_championslists_items', 'listPersons'),
@@ -107,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{place_legend},year,number,place,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{publish_legend},published'
+		'default'                     => '{place_legend},year,failed,number,place,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{publish_legend},published'
 	),
 
 	// Fields
@@ -134,8 +134,16 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'sorting'                 => true,
 			'flag'                    => 12,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'rgxp'=>'digit', 'tl_class'=>'w50', 'maxlength'=>5),
-			'sql'                     => "varchar(5) NOT NULL default ''"
+			'eval'                    => array('mandatory'=>true, 'rgxp'=>'alnum', 'tl_class'=>'w50', 'maxlength'=>10),
+			'sql'                     => "varchar(10) NOT NULL default ''"
+		),
+		'failed' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['failed'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50 m12'),
+			'sql'                     => "char(1) NOT NULL default ''"
 		),
 		'number' => array
 		(
@@ -531,7 +539,9 @@ class tl_championslists_items extends Backend
 	{
 		$kategorien = \Schachbulle\ContaoChampionslistsBundle\Classes\Helper::getTitles();
 
-		$temp = '<div class="tl_content_left"><b>'.$arrRow['year'].'</b> ';
+		$failed_style = $arrRow['failed'] ? 'background-color:#FFD2D2;' : '';
+		$failed_info = $arrRow['failed'] ? 'Veranstaltung ist ausgefallen' : '';
+		$temp = '<div class="tl_content_left" style="'.$failed_style.'" title="'.$failed_info.'"><b>'.$arrRow['year'].'</b> ';
 		if($arrRow['url']) $temp .= '<img src="bundles/contaochampionslists/images/link-add-icon.png" title="Link zur Detailseite vorhanden"> ';
 		else $temp .= '<img src="bundles/contaochampionslists/images/link-delete-icon.png" title="Link zur Detailseite nicht vorhanden"> ';
 		if($arrRow['number']) $temp .= '['.$arrRow['number'].'] ';

@@ -15,7 +15,7 @@ class ChampionslistsMono extends \ContentElement
 	 */
 	protected function compile()
 	{
-		// Adresse aus Datenbank laden, wenn ID übergeben wurde
+		// Adresse aus Datenbank laden, wenn ID Ã¼bergeben wurde
 		if($this->championslist)
 		{
 
@@ -31,8 +31,8 @@ class ChampionslistsMono extends \ContentElement
 				$this->Template->id = $this->championslist;
 				$this->Template->title = $objListe->title;
 
-				// Listeneinträge laden
-				if($this->championslist_filter && $this->championsfrom && $this->championsto) // Filterung nach Jahren gewünscht
+				// ListeneintrÃ¤ge laden
+				if($this->championslist_filter && $this->championsfrom && $this->championsto) // Filterung nach Jahren gewÃ¼nscht
 				{
 					// Sortierung festlegen
 					($this->championsfrom < $this->championsto) ? $order = 'ASC' : $order = 'DESC';
@@ -48,18 +48,18 @@ class ChampionslistsMono extends \ContentElement
 						$bis = $this->championsfrom;
 					}
 					// Abfrage starten
-					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? AND year >= $von AND year <= $bis ORDER BY year $order")
+					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? AND year >= $von AND year <= $bis ORDER BY year $order, number $order")
 					                           ->execute($this->championslist, 1);
 				}
 				else // Keine Filterung
-					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? ORDER BY year DESC")
+					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? ORDER BY year DESC, number DESC")
 					                           ->execute($this->championslist, 1);
 
 				$item = array();
 
 				if($objItems)
 				{
-					// Standardbilddatei und Standardbildmaße festlegen
+					// Standardbilddatei und StandardbildmaÃŸe festlegen
 					switch($objListe->typ)
 					{
 						case 'E': // Einzelturnier
@@ -79,9 +79,11 @@ class ChampionslistsMono extends \ContentElement
 					$i = 0;
 					while($objItems->next())
 					{
-						(bcmod($i,2)) ? $item[$i]['class'] = 'odd' : $item[$i]['class'] = 'even';
+						(bcmod($i,2)) ? $class = 'odd' : $class = 'even';
+						$class .= $objItems->failed ? ' failed' : '';
 						$item[$i]['nummer']                          = $objItems->number;
 						$item[$i]['jahr']                            = $objItems->year;
+						$item[$i]['class']                           = $class;
 						$item[$i]['ort']                             = $objItems->place;
 						$item[$i]['linkurl']                         = $objItems->url;
 						$item[$i]['linkziel']                        = $objItems->target;
@@ -113,7 +115,7 @@ class ChampionslistsMono extends \ContentElement
 						$item[$i]['platz']['meister']['imageAlt']      = $objBild->alt;
 						$item[$i]['platz']['meister']['imageCaption']  = $objBild->caption;
 
-						// Info ergänzen
+						// Info ergÃ¤nzen
 						$item[$i]['info'] = $objItems->info;
 
 						// Weitere Spieler?

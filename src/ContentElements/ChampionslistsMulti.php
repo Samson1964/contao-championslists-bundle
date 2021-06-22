@@ -48,11 +48,11 @@ class ChampionslistsMulti extends \ContentElement
 						$bis = $this->championsfrom;
 					}
 					// Abfrage starten
-					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? AND year >= $von AND year <= $bis ORDER BY year $order")
+					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? AND year >= $von AND year <= $bis ORDER BY year $order, number $order")
 					                           ->execute($this->championslist, 1);
 				}
 				else // Keine Filterung
-					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? ORDER BY year DESC")
+					$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? ORDER BY year DESC, number DESC")
 					                           ->execute($this->championslist, 1);
 
 				$item = array();
@@ -79,9 +79,11 @@ class ChampionslistsMulti extends \ContentElement
 					$i = 0;
 					while($objItems->next())
 					{
-						(bcmod($i,2)) ? $item[$i]['class'] = 'odd' : $item[$i]['class'] = 'even';
+						(bcmod($i,2)) ? $class = 'odd' : $class = 'even';
+						$class .= $objItems->failed ? ' failed' : '';
 						$item[$i]['nummer']                          = $objItems->number;
 						$item[$i]['jahr']                            = $objItems->year;
+						$item[$i]['class']                           = $class;
 						$item[$i]['ort']                             = $objItems->place;
 						$item[$i]['linkurl']                         = $objItems->url;
 						$item[$i]['linkziel']                        = $objItems->target;

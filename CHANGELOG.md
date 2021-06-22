@@ -1,5 +1,12 @@
 # Meisterliste Changelog
 
+## Version 3.2.0 (2021-06-22)
+
+* Change: tl_championslists_items.year geändert von varchar(5) auf varchar(10), um Angaben wie "1999-2000" zu ermöglichen
+* Delete: tl_championslists.alias inkl. Funktion generateAlias
+* Add: tl_championslists_items.failed - Option zur Kennzeichnung von Absagen im Backend (rote Markierung) und Frontend (CSS-Klasse failed)
+* Fix: Sortierung der Meister zuerst nach Jahr, danach zusätzlich nach Nummer
+
 ## Version 3.1.1 (2021-03-10)
 
 * Fix: print_r in tl_championslists_item entfernt
@@ -11,7 +18,7 @@
 * Fix: Platzierungen werden in Mannschaftsturnieren nicht im Template ausgegeben
 * Fix: Korrekturen in default.css - Farbe Jahr/Ort, figure/figcaption-Positionierung
 * Delete: tl_championslists_items überflüssige Felder entfernt
-* Add: Meisterschaft verlinkt ja/nein in Backend anzeigen   
+* Add: Meisterschaft verlinkt ja/nein in Backend anzeigen
 * Fix: Bei leeren Platzierungen nicht "()" im Backend anzeigen
 
 ## Version 3.0.0 (2021-03-05)
