@@ -1,5 +1,10 @@
 # Meisterliste Changelog
 
+## Version 3.2.1 (2021-07-15)
+
+* Fix: Hinter jeder Liste steht unformatiert der Listentyp -> besser formatieren -> showColumns = true
+* Add: tl_championslists Toogle-Icon eingefügt
+
 ## Version 3.2.0 (2021-06-22)
 
 * Change: tl_championslists_items.year geändert von varchar(5) auf varchar(10), um Angaben wie "1999-2000" zu ermöglichen
