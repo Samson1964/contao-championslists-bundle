@@ -243,7 +243,13 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['singleSRC'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'tl_class'=>'clr'),
+			'eval'                    => array
+			(
+				'filesOnly'           => true,
+				'fieldType'           => 'radio',
+				'tl_class'            => 'clr',
+				'extensions'          => 'jpg,jpeg,png,gif,webp'
+			),
 			'sql'                     => "binary(16) NULL",
 		),
 		'spielerregister_id' => array
@@ -427,23 +433,6 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 	)
 );
 
-// Listentyp mittels Abfrage ermitteln
-//$GLOBALS['championslist-typ'] = 'E';
-//$objItem = \Database::getInstance()->prepare("SELECT pid FROM tl_championslists_items WHERE id=?")
-//                                   ->limit(1)
-//                                   ->execute($dc->id);
-//$objListe = \Database::getInstance()->prepare("SELECT typ FROM tl_championslists WHERE id=?")
-//                                    ->limit(1)
-//                                    ->execute($objItem->pid);
-//
-//if($objListe->typ == 'M' || $objListe->typ == 'W') $GLOBALS['championslist-typ'] = $objListe->typ;
-//
-//// DCA ändern, wenn Mannschaftseingabe
-//if($GLOBALS['championslist-typ'] == 'M' || $GLOBALS['championslist-typ'] == 'W')
-//{
-//	$GLOBALS['TL_DCA']['tl_championslists_items']['fields']['platzierungen']['eval']['columnFields']['alter'] = array();
-//}
-
 /**
  * Class tl_championslists_items
  *
@@ -601,10 +590,9 @@ class tl_championslists_items extends Backend
 	{
 
 		// Listentyp mittels Abfrage ermitteln
-		$GLOBALS['championslist-typ'] = 'E';
 		$objItem = $this->Database->prepare("SELECT pid FROM tl_championslists_items WHERE id=?")
-		                 ->limit(1)
-		                 ->execute($dc->id);
+		                ->limit(1)
+		                ->execute($dc->id);
 		$objListe = $this->Database->prepare("SELECT typ FROM tl_championslists WHERE id=?")
 		                 ->limit(1)
 		                 ->execute($objItem->pid);
@@ -613,32 +601,15 @@ class tl_championslists_items extends Backend
 		{
 			// Mannschaftsturnier männlich/weiblich
 			$GLOBALS['championslist-typ'] = $objListe->typ;
-			//PaletteManipulator::create()
-			//    ->removeField('age', 'person1_legend')
-			//    ->removeField('clubrating', 'person1_legend')
-			//    ->removeField('cowinner', 'person1_legend')
-			//    ->removeField('spielerregister_id', 'person1_legend')
-			//    ->removeField('person2', 'person2_legend')
-			//    ->removeField('person3', 'person3_legend')
-			//    ->removeField('person4', 'person4_legend')
-			//    ->removeField('person5', 'person5_legend')
-			//    ->removeField('person6', 'person6_legend')
-			//    ->addField('nomination', 'singleSRC', PaletteManipulator::POSITION_AFTER)
-			//    ->addLegend('person2_legend', 'person_legend', PaletteManipulator::POSITION_AFTER)
-			//    ->addLegend('person3_legend', 'person2_legend', PaletteManipulator::POSITION_AFTER)
-			//    ->addField('name2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
-			//    ->addField('singleSRC2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
-			//    ->addField('nomination2', 'person2_legend', PaletteManipulator::POSITION_APPEND)
-			//    ->addField('name3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
-			//    ->addField('singleSRC3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
-			//    ->addField('nomination3', 'person3_legend', PaletteManipulator::POSITION_APPEND)
-			//    ->applyToPalette('default', 'tl_championslists_items');
-			//// Sprachvariablen anpassen
-			//$GLOBALS['TL_LANG']['tl_championslists_items']['name'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name'];
-			//$GLOBALS['TL_LANG']['tl_championslists_items']['name2'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name2'];
-			//$GLOBALS['TL_LANG']['tl_championslists_items']['name3'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name3'];
-			//$GLOBALS['TL_LANG']['tl_championslists_items']['person2_legend'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_person2_legend'];
-			//$GLOBALS['TL_LANG']['tl_championslists_items']['person3_legend'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_person3_legend'];
+			PaletteManipulator::create()
+			    ->removeField('age', 'person1_legend')
+			    ->removeField('clubrating', 'person1_legend')
+			    ->removeField('cowinner', 'person1_legend')
+			    ->removeField('spielerregister_id', 'person1_legend')
+			    ->addField('nomination', 'singleSRC', PaletteManipulator::POSITION_AFTER)
+			    ->applyToPalette('default', 'tl_championslists_items');
+			// Sprachvariablen anpassen
+			$GLOBALS['TL_LANG']['tl_championslists_items']['name'] = $GLOBALS['TL_LANG']['tl_championslists_items']['team_name'];
 		}
 
 	}

@@ -1,5 +1,10 @@
 # Meisterliste Changelog
 
+## Version 3.2.2 (2022-01-18)
+
+* Fix: Fotoauswahl zeigte alle Dateien statt nur Bilder an
+* Fix: Palette Mannschaftsturnier wurde nicht angezeigt
+
 ## Version 3.2.1 (2021-07-15)
 
 * Fix: Hinter jeder Liste steht unformatiert der Listentyp -> besser formatieren -> showColumns = true
