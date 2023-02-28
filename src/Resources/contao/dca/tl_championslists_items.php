@@ -91,9 +91,16 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'toggle' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_championslists_items']['toggle'],
-				'icon'                => 'visible.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-				'button_callback'       => array('tl_championslists_items', 'toggleIcon')
+				'attributes'           => 'onclick="Backend.getScrollOffset()"',
+				'haste_ajax_operation' => array
+				(
+					'field'            => 'published',
+					'options'          => array
+					(
+						array('value' => '', 'icon' => 'invisible.svg'),
+						array('value' => '1', 'icon' => 'visible.svg'),
+					),
+				),
 			),
 			'show' => array
 			(
@@ -107,7 +114,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{place_legend},year,failed,number,place,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{publish_legend},published'
+		'default'                     => '{recording_legend},recording;{place_legend},year,failed,number,place,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{publish_legend},published'
 	),
 
 	// Fields
@@ -126,6 +133,17 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 		'tstamp' => array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
+		// Erfassungsstand/Vollständigkeit der Turnierseite
+		'recording' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['recording'],
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'checkboxWizard',
+			'options'                 => &$GLOBALS['TL_LANG']['tl_championslists_items']['recording_options'],
+			'eval'                    => array('tl_class'=>'w50', 'multiple'=>true),
+			'sql'                     => "blob NULL"
 		),
 		'year' => array
 		(
@@ -425,10 +443,11 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'exclude'                   => true,
 			'search'                    => false,
 			'sorting'                   => false,
+			'default'                   => 1,
 			'filter'                    => true,
 			'inputType'                 => 'checkbox',
 			'eval'                      => array('tl_class' => 'w50','isBoolean' => true),
-			'sql'                       => "char(1) NOT NULL default ''"
+			'sql'                       => "char(1) NOT NULL default '1'"
 		),
 	)
 );
@@ -455,82 +474,41 @@ class tl_championslists_items extends Backend
 		$this->import('BackendUser', 'User');
 	}
 
-	/**
-	 * Ändert das Aussehen des Toggle-Buttons.
-	 * @param $row
-	 * @param $href
-	 * @param $label
-	 * @param $title
-	 * @param $icon
-	 * @param $attributes
-	 * @return string
-	 */
-	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
-	{
-		$this->import('BackendUser', 'User');
-
-		if (strlen($this->Input->get('tid')))
-		{
-			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 0));
-			$this->redirect($this->getReferer());
-		}
-
-		// Check permissions AFTER checking the tid, so hacking attempts are logged
-		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_championslists_items::published', 'alexf'))
-		{
-			return '';
-		}
-
-		$href .= '&amp;id='.$this->Input->get('id').'&amp;tid='.$row['id'].'&amp;state='.$row[''];
-
-		if (!$row['published'])
-		{
-			$icon = 'invisible.gif';
-		}
-
-		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
-	}
-
-	/**
-	 * Toggle the visibility of an element
-	 * @param integer
-	 * @param boolean
-	 */
-	public function toggleVisibility($intId, $blnPublished)
-	{
-		// Check permissions to publish
-		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_championslists_items::published', 'alexf'))
-		{
-			$this->log('Not enough permissions to show/hide record ID "'.$intId.'"', 'tl_championslists_items toggleVisibility', TL_ERROR);
-			$this->redirect('contao/main.php?act=error');
-		}
-
-		$this->createInitialVersion('tl_championslists_items', $intId);
-
-		// Trigger the save_callback
-		if (is_array($GLOBALS['TL_DCA']['tl_championslists_items']['fields']['published']['save_callback']))
-		{
-			foreach ($GLOBALS['TL_DCA']['tl_championslists_items']['fields']['published']['save_callback'] as $callback)
-			{
-				$this->import($callback[0]);
-				$blnPublished = $this->$callback[0]->$callback[1]($blnPublished, $this);
-			}
-		}
-
-		// Update the database
-		$this->Database->prepare("UPDATE tl_championslists_items SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
-		               ->execute($intId);
-		$this->createNewVersion('tl_championslists_items', $intId);
-	}
-
-
 	public function listPersons($arrRow)
 	{
 		$kategorien = \Schachbulle\ContaoChampionslistsBundle\Classes\Helper::getTitles();
 
+		$temp = '<div class="tl_content_right">';
+		// Erfassungsstand anzeigen
+		$erfassung = unserialize($arrRow['recording']);
+		if(!is_array($erfassung)) $erfassung = array();
+		$anzahl = 0;
+		$textArr = array();
+		$gruen = '';
+		$rot = '';
+		foreach($GLOBALS['TL_LANG']['tl_championslists_items']['recording_options'] as $key => $value)
+		{
+			if(in_array($key, $erfassung)) 
+			{
+				$anzahl++;
+				$gruen .= '<img src="bundles/contaochampionslists/images/bar_green.png">';
+				$textArr[] = $value;
+				//$temp .= '<img src="bundles/contaochampionslists/images/bar_green.png" title="'.$value.' vorhanden">';
+			}
+			else 
+			{
+				$rot .= '<img src="bundles/contaochampionslists/images/bar_grow.png">';
+				//$temp .= '<img src="bundles/contaochampionslists/images/bar_grow.png" title="'.$value.' nicht erfasst">';
+			}
+		}
+		if(count($textArr)) $temp .= '<span title="Vorhanden: '.implode(', ',$textArr).'">'.$gruen.$rot.'</span>';
+		else $temp .= '<span title="Keine Erfassungen">'.$gruen.$rot.'</span>';
+		$temp .= '&nbsp;';
+		$temp .= '</div>';
+
 		$failed_style = $arrRow['failed'] ? 'background-color:#FFD2D2;' : '';
 		$failed_info = $arrRow['failed'] ? 'Veranstaltung ist ausgefallen' : '';
-		$temp = '<div class="tl_content_left" style="'.$failed_style.'" title="'.$failed_info.'"><b>'.$arrRow['year'].'</b> ';
+		$temp .= '<div class="tl_content_left" style="'.$failed_style.'" title="'.$failed_info.'"><b>'.$arrRow['year'].'</b> ';
 		if($arrRow['url']) $temp .= '<img src="bundles/contaochampionslists/images/link-add-icon.png" title="Link zur Detailseite vorhanden"> ';
 		else $temp .= '<img src="bundles/contaochampionslists/images/link-delete-icon.png" title="Link zur Detailseite nicht vorhanden"> ';
 		if($arrRow['number']) $temp .= '['.$arrRow['number'].'] ';
@@ -580,7 +558,9 @@ class tl_championslists_items extends Backend
 			}
 		}
 
-		return $temp.'</div>';
+		$temp .= '</div>';
+		
+		return $temp;
 	}
 
 	/**

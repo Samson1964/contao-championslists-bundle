@@ -10,6 +10,9 @@
 $GLOBALS['TL_LANG']['tl_championslists_items']['new'] = array('Neuer Eintrag', 'Neuen Eintrag anlegen');
 
 // Eingabemaske
+$GLOBALS['TL_LANG']['tl_championslists_items']['recording_legend'] = 'Erfassungsstand/Vollständigkeit';
+$GLOBALS['TL_LANG']['tl_championslists_items']['recording'] = array('Erfassungsstand', 'Erfassungsstand/Vollständigkeit der Turnierseite und erledigte Recherche-Aufgaben.');
+
 $GLOBALS['TL_LANG']['tl_championslists_items']['place_legend'] = 'Jahr und Ort';
 $GLOBALS['TL_LANG']['tl_championslists_items']['number'] = array('Nummer', 'Laufende Nummer der Veranstaltung');
 $GLOBALS['TL_LANG']['tl_championslists_items']['year'] = array('Jahr', 'Jahr der Veranstaltung');
@@ -66,7 +69,7 @@ $GLOBALS['TL_LANG']['tl_championslists_items']['published'] = array('Veröffentl
 
 $GLOBALS['TL_LANG']['tl_championslists_items']['typ'] = array('Typ', 'Personentyp');
 
-$GLOBALS['TL_LANG']['tl_championslists_item']['typen'] = array
+$GLOBALS['TL_LANG']['tl_championslists_items']['typen'] = array
 (
 	1 => '2. Platz',
 	2 => '3. Platz',
@@ -85,3 +88,15 @@ $GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_rating'] = array('
 $GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_image'] = array('Bild', 'Bild einbinden');
 $GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_spielerregister'] = array('Spielerregister (nur Einzel)', 'Eintrag im Spielerregister');
 $GLOBALS['TL_LANG']['tl_championslists_items']['platzierungen_aufstellung'] = array('Aufstellung (nur Mannschaften)', 'Aufstellung (nur Mannschaften)');
+
+$GLOBALS['TL_LANG']['tl_championslists_items']['recording_options'] = array
+(
+	1  => 'PGN',
+	2  => 'Ergebnisse',
+	3  => 'Fotos',
+	4  => 'Bericht(e)',
+	21 => 'Recherche archive.org',
+	22 => 'Recherche Internet allgemein',
+	23 => 'Recherche Rochade Europa',
+	24 => 'Recherche andere Schachzeitungen',
+);

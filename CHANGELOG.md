@@ -1,5 +1,16 @@
 # Meisterliste Changelog
 
+## Version 3.3.0 (2023-02-28)
+
+* Add: Abhängigkeit codefog/contao-haste
+* Add: Kompatibilität mit PHP 8
+* Change: tl_championslists -> Toggle-Funktion ausgetauscht gegen Haste-Toggler
+* Change: tl_championslists_categories -> Toggle-Funktion ausgetauscht gegen Haste-Toggler
+* Change: tl_championslists_items -> Toggle-Funktion ausgetauscht gegen Haste-Toggler
+* Change: tl_championslists_items.published -> Standard auf true gesetzt
+* Add: ja/nein-Icons für Anzeige der Vollständigkeit der Erfassung
+* Add: tl_championslists_items.recording -> Select mit Optionen für Vollständigkeit der Erfassung + Anzeige in Übersicht
+
 ## Version 3.2.2 (2022-01-18)
 
 * Fix: Fotoauswahl zeigte alle Dateien statt nur Bilder an
