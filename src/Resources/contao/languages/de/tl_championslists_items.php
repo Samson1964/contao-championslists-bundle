@@ -6,9 +6,6 @@
  *
  */
 
-// Listenansicht
-$GLOBALS['TL_LANG']['tl_championslists_items']['new'] = array('Neuer Eintrag', 'Neuen Eintrag anlegen');
-
 // Eingabemaske
 $GLOBALS['TL_LANG']['tl_championslists_items']['recording_legend'] = 'Erfassungsstand/Vollständigkeit';
 $GLOBALS['TL_LANG']['tl_championslists_items']['recording'] = array('Erfassungsstand', 'Erfassungsstand/Vollständigkeit der Turnierseite und erledigte Recherche-Aufgaben.');
@@ -100,3 +97,15 @@ $GLOBALS['TL_LANG']['tl_championslists_items']['recording_options'] = array
 	23 => 'Recherche Rochade Europa',
 	24 => 'Recherche andere Schachzeitungen',
 );
+
+/**
+ * Buttons für Operationen
+ */
+
+$GLOBALS['TL_LANG']['tl_championslists_items']['new'] = array('Neuer Eintrag', 'Neuen Eintrag anlegen');
+$GLOBALS['TL_LANG']['tl_championslists_items']['edit'] = array('Eintrag bearbeiten', 'Eintrag %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_championslists_items']['copy'] = array('Eintrag kopieren', 'Eintrag %s kopieren');
+$GLOBALS['TL_LANG']['tl_championslists_items']['cut'] = array('Eintrag verschieben', 'Eintrag %s verschieben');
+$GLOBALS['TL_LANG']['tl_championslists_items']['delete'] = array('Eintrag löschen', 'Eintrag %s löschen');
+$GLOBALS['TL_LANG']['tl_championslists_items']['toggle'] = array('Eintrag veröffentlichen', 'Eintrag %s veröffentlichen');
+$GLOBALS['TL_LANG']['tl_championslists_items']['show'] = array('Eintragsdetails anzeigen', 'Details des Eintrags %s anzeigen');

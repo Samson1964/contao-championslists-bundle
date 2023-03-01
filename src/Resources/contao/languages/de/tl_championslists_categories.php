@@ -7,7 +7,6 @@
  */
 
 // Listenansicht
-$GLOBALS['TL_LANG']['tl_championslists_categories']['new'] = array('Neuer Platzierungsname', 'Neuen Platzierungsnamen anlegen');
 $GLOBALS['TL_LANG']['tl_championslists_categories']['listen'] = array('Meisterlisten', 'Meisterlisten bearbeiten');
 
 // Eingabemaske
@@ -20,3 +19,14 @@ $GLOBALS['TL_LANG']['tl_championslists_categories']['published'] = array('Veröf
 
 // Meldungen
 $GLOBALS['TL_LANG']['tl_championslists_categories']['error_alias'] = "Das Alias '%s' kan nicht erezugt/gespeichert werden, da es für den (Gesamt-)Sieger reserviert ist!";
+
+/**
+ * Buttons für Operationen
+ */
+
+$GLOBALS['TL_LANG']['tl_championslists_categories']['new'] = array('Neuer Platzierungsname', 'Neuen Platzierungsnamen anlegen');
+$GLOBALS['TL_LANG']['tl_championslists_categories']['edit'] = array('Platzierungsname bearbeiten', 'Platzierungsname %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_championslists_categories']['copy'] = array('Platzierungsname kopieren', 'Platzierungsname %s kopieren');
+$GLOBALS['TL_LANG']['tl_championslists_categories']['delete'] = array('Platzierungsname löschen', 'Platzierungsname %s löschen');
+$GLOBALS['TL_LANG']['tl_championslists_categories']['toggle'] = array('Platzierungsname veröffentlichen', 'Platzierungsname %s veröffentlichen');
+$GLOBALS['TL_LANG']['tl_championslists_categories']['show'] = array('Platzierungsnamendetails anzeigen', 'Details des Platzierungsnamen %s anzeigen');

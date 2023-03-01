@@ -1,5 +1,9 @@
 # Meisterliste Changelog
 
+## Version 3.3.1 (2023-03-01)
+
+* Add: Übersetzungen Backend-Module
+
 ## Version 3.3.0 (2023-02-28)
 
 * Add: Abhängigkeit codefog/contao-haste
