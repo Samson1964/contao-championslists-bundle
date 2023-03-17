@@ -114,7 +114,7 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{recording_legend},recording;{place_legend},year,failed,number,place,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{publish_legend},published'
+		'default'                     => '{recording_legend},recording;{place_legend},year,failed,number,place,numberParticipants,url,target;{info_legend},info;{person1_legend},name,age,verein,rating,cowinner,singleSRC,spielerregister_id;{platzierungen_legend:hide},platzierungen;{publish_legend},published'
 	),
 
 	// Fields
@@ -182,6 +182,16 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			'inputType'               => 'text',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
+		'numberParticipants' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_championslists_items']['numberParticipants'],
+			'exclude'                 => true,
+			'sorting'                 => true,
+			'flag'                    => 12,
+			'inputType'               => 'text',
+			'eval'                    => array('mandatory'=>false, 'rgxp'=>'alnum', 'tl_class'=>'w50', 'maxlength'=>5),
+			'sql'                     => "varchar(5) NOT NULL default ''"
 		),
 		'url' => array
 		(
@@ -479,6 +489,9 @@ class tl_championslists_items extends Backend
 		$kategorien = \Schachbulle\ContaoChampionslistsBundle\Classes\Helper::getTitles();
 
 		$temp = '<div class="tl_content_right">';
+		// Anzahl Teilnehmer anzeigen
+		if($arrRow['numberParticipants']) $temp .= '<span title="Anzahl Teilnehmer">(<b>'.$arrRow['numberParticipants'].'</b>)</span>&nbsp;';
+		else $temp .= '<span title="Anzahl Teilnehmer">(?)</span>&nbsp;';
 		// Erfassungsstand anzeigen
 		$erfassung = unserialize($arrRow['recording']);
 		if(!is_array($erfassung)) $erfassung = array();

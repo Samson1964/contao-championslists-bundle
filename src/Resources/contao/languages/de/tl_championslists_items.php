@@ -15,6 +15,7 @@ $GLOBALS['TL_LANG']['tl_championslists_items']['number'] = array('Nummer', 'Lauf
 $GLOBALS['TL_LANG']['tl_championslists_items']['year'] = array('Jahr', 'Jahr der Veranstaltung');
 $GLOBALS['TL_LANG']['tl_championslists_items']['failed'] = array('Ausgefallen', 'Veranstaltung ist ausgefallen');
 $GLOBALS['TL_LANG']['tl_championslists_items']['place'] = array('Ort', 'Ort der Veranstaltung');
+$GLOBALS['TL_LANG']['tl_championslists_items']['numberParticipants'] = array('Teilnehmer', 'Anzahl der Teilnehmer');
 $GLOBALS['TL_LANG']['tl_championslists_items']['url'] = array('URL', 'Link zur Veranstaltung');
 $GLOBALS['TL_LANG']['tl_championslists_items']['target'] = array('Neues Fenster', 'Link im neuen Fenster öffnen');
 

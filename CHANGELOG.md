@@ -1,5 +1,9 @@
 # Meisterliste Changelog
 
+## Version 3.3.2 (2023-03-17)
+
+* Add: tl_championslists_items.numberParticipants -> Anzahl der Teilnehmer (plus Anzeige im Backend)
+
 ## Version 3.3.1 (2023-03-01)
 
 * Add: Übersetzungen Backend-Module
