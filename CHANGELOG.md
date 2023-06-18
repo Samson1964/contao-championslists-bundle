@@ -1,5 +1,9 @@
 # Meisterliste Changelog
 
+## Version 3.4.0 (2023-06-18)
+
+* Add: PHP 8 in composer.json als erlaubt eingetragen
+
 ## Version 3.3.2 (2023-03-17)
 
 * Add: tl_championslists_items.numberParticipants -> Anzahl der Teilnehmer (plus Anzeige im Backend)
