@@ -15,7 +15,9 @@ class Champion extends \ContentElement
 	 */
 	protected function compile()
 	{
-		// Adresse aus Datenbank laden, wenn ID übergeben wurde
+		global $objPage;
+
+		// Adresse aus Datenbank laden, wenn ID Ã¼bergeben wurde
 		if($this->championslist)
 		{
 
@@ -33,7 +35,7 @@ class Champion extends \ContentElement
 				$this->Template->id = $this->championslist;
 				$this->Template->title = $objListe->title;
 
-				// Listeneinträge laden
+				// ListeneintrÃ¤ge laden
 				$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? AND name <> ? ORDER BY year DESC")
 				                           ->limit(1)
 				                           ->execute($this->championslist, 1, '');
@@ -42,7 +44,7 @@ class Champion extends \ContentElement
 
 				if($objItems)
 				{
-					// Standardbilddatei und Standardbildmaße festlegen
+					// Standardbilddatei und StandardbildmaÃŸe festlegen
 					switch($objListe->typ)
 					{
 						case 'E': // Einzelturnier
@@ -69,6 +71,13 @@ class Champion extends \ContentElement
 					{
 						// Foto aus der Datenbank
 						$objFile = \FilesModel::findByPk($objItems->singleSRC);
+						if(!$objFile)
+						{
+							// Model findet keine gÃ¼ltige Datei
+							log_message('Kein gÃ¼ltiges Bild gefunden auf Seite '.$objPage->alias.': '.print_r($objItems->singleSRC), 'championslists.log');
+							// Deshalb Standardfoto verwenden
+							$objFile = \FilesModel::findByUuid($bild);
+						}
 					}
 					else
 					{

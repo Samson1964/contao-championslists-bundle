@@ -15,6 +15,8 @@ class ChampionslistsMulti extends \ContentElement
 	 */
 	protected function compile()
 	{
+		global $objPage;
+
 		// Adresse aus Datenbank laden, wenn ID übergeben wurde
 		if($this->championslist)
 		{
@@ -95,6 +97,13 @@ class ChampionslistsMulti extends \ContentElement
 						{
 							// Foto aus der Datenbank
 							$objFile = \FilesModel::findByPk($objItems->singleSRC);
+							if(!$objFile)
+							{
+								// Model findet keine gültige Datei
+								log_message('Kein gültiges Bild gefunden auf Seite '.$objPage->alias.': '.print_r($objItems->singleSRC), 'championslists.log');
+								// Deshalb Standardfoto verwenden
+								$objFile = \FilesModel::findByUuid($bild);
+							}
 						}
 						else
 						{
@@ -126,6 +135,13 @@ class ChampionslistsMulti extends \ContentElement
 								{
 									// Foto aus der Datenbank
 									$objFile = \FilesModel::findByPk($platz['image']);
+									if(!$objFile)
+									{
+										// Model findet keine gültige Datei
+										log_message('Kein gültiges Bild gefunden auf Seite '.$objPage->alias.': '.print_r($platz['image']), 'championslists.log');
+										// Deshalb Standardfoto verwenden
+										$objFile = \FilesModel::findByUuid($bild);
+									}
 								}
 								else
 								{

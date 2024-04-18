@@ -1,5 +1,9 @@
 # Meisterliste Changelog
 
+## Version 3.4.1 (2024-04-18)
+
+* Fix: Image "" could not be processed: Image type "2020" was not allowed to be processed -> addImageToTemplate bekommt ein leeres Objekt
+
 ## Version 3.4.0 (2023-06-18)
 
 * Add: PHP 8 in composer.json als erlaubt eingetragen
