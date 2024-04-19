@@ -1,5 +1,9 @@
 # Meisterliste Changelog
 
+## Version 3.4.2 (2024-04-19)
+
+* Fix: Beim Schreiben mit log_message bei print_r true vergessen
+
 ## Version 3.4.1 (2024-04-18)
 
 * Fix: Image "" could not be processed: Image type "2020" was not allowed to be processed -> addImageToTemplate bekommt ein leeres Objekt

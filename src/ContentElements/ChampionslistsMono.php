@@ -103,7 +103,7 @@ class ChampionslistsMono extends \ContentElement
 							if(!$objFile)
 							{
 								// Model findet keine gültige Datei
-								log_message('Kein gültiges Bild gefunden auf Seite '.$objPage->alias.': '.print_r($objItems->singleSRC), 'championslists.log');
+								log_message('Kein gültiges Bild gefunden auf Seite '.$objPage->alias.': '.print_r($objItems->singleSRC, true), 'championslists.log');
 								// Deshalb Standardfoto verwenden
 								$objFile = \FilesModel::findByUuid($bild);
 							}
@@ -141,7 +141,7 @@ class ChampionslistsMono extends \ContentElement
 									if(!$objFile)
 									{
 										// Model findet keine gültige Datei
-										log_message('Kein gültiges Bild gefunden auf Seite '.$objPage->alias.': '.print_r($platz['image']), 'championslists.log');
+										log_message('Kein gültiges Bild gefunden auf Seite '.$objPage->alias.': '.print_r($platz['image'], true), 'championslists.log');
 										// Deshalb Standardfoto verwenden
 										$objFile = \FilesModel::findByUuid($bild);
 									}
