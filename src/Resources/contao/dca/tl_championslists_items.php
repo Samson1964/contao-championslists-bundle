@@ -530,7 +530,21 @@ class tl_championslists_items extends Backend
 
 		if($GLOBALS['championslist-typ'] == 'E' || $GLOBALS['championslist-typ'] == 'F')
 		{
-			if($arrRow['singleSRC']) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
+			if($arrRow['singleSRC'])
+			{
+				// Foto vorhanden, jetzt prüfen ob die Datei auch vorhanden ist
+				$objFile = \FilesModel::findByPk($arrRow['singleSRC']);
+				if(!$objFile)
+				{
+					// Model findet keine gültige Datei
+					log_message('Kein gültiges Bild via Backend gefunden: '.print_r($arrRow['singleSRC'], true), 'championslists.log');
+					$temp .= '<img src="bundles/contaochampionslists/images/user-icon_rot.png" title="Bild angegeben, aber nicht mehr vorhanden">';
+				}
+				else
+				{
+					$temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
+				}
+			}
 			if($arrRow['spielerregister_id']) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
 			// Restliche Spieler ausgeben
 			if($arrRow['platzierungen'])
@@ -543,7 +557,21 @@ class tl_championslists_items extends Backend
 						if($platz['platz'])
 						{
 							$temp .= ' | <b>'.$platz['name'].'</b> (<i>'.$kategorien[$platz['platz']].'</i>) ';
-							if($platz['image']) $temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
+							if($platz['image'])
+							{
+								// Foto vorhanden, jetzt prüfen ob die Datei auch vorhanden ist
+								$objFile = \FilesModel::findByPk($platz['image']);
+								if(!$objFile)
+								{
+									// Model findet keine gültige Datei
+									log_message('Kein gültiges Bild via Backend gefunden: '.print_r($platz['image'], true), 'championslists.log');
+									$temp .= '<img src="bundles/contaochampionslists/images/user-icon_rot.png" title="Bild angegeben, aber nicht mehr vorhanden">';
+								}
+								else
+								{
+									$temp .= '<img src="bundles/contaochampionslists/images/user-icon.png" title="Bild vorhanden">';
+								}
+							}
 							if($platz['spielerregister']) $temp .= '<img src="bundles/contaochampionslists/images/register-icon.png" title="mit Spielerregister verknüpft">';
 						}
 					}
@@ -552,8 +580,22 @@ class tl_championslists_items extends Backend
 		}
 		else
 		{
-			if($arrRow['singleSRC']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
 			// Restliche Mannschaften ausgeben
+			if($arrRow['singleSRC'])
+			{
+				// Foto vorhanden, jetzt prüfen ob die Datei auch vorhanden ist
+				$objFile = \FilesModel::findByPk($arrRow['singleSRC']);
+				if(!$objFile)
+				{
+					// Model findet keine gültige Datei
+					log_message('Kein gültiges Bild via Backend gefunden: '.print_r($arrRow['singleSRC'], true), 'championslists.log');
+					$temp .= '<img src="bundles/contaochampionslists/images/team-icon_rot.png" title="Bild angegeben, aber nicht mehr vorhanden">';
+				}
+				else
+				{
+					$temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
+				}
+			}
 			if($arrRow['platzierungen'])
 			{
 				$platzierungen = unserialize($arrRow['platzierungen']);
@@ -564,7 +606,21 @@ class tl_championslists_items extends Backend
 						if($platz['platz'])
 						{
 							$temp .= ' | <b>'.$platz['name'].'</b> (<i>'.$kategorien[$platz['platz']].'</i>) ';
-							if($platz['image']) $temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
+							if($platz['image'])
+							{
+								// Foto vorhanden, jetzt prüfen ob die Datei auch vorhanden ist
+								$objFile = \FilesModel::findByPk($platz['image']);
+								if(!$objFile)
+								{
+									// Model findet keine gültige Datei
+									log_message('Kein gültiges Bild via Backend gefunden: '.print_r($platz['image'], true), 'championslists.log');
+									$temp .= '<img src="bundles/contaochampionslists/images/team-icon_rot.png" title="Bild angegeben, aber nicht mehr vorhanden">';
+								}
+								else
+								{
+									$temp .= '<img src="bundles/contaochampionslists/images/team-icon.png" title="Bild vorhanden">';
+								}
+							}
 						}
 					}
 				}
@@ -589,11 +645,11 @@ class tl_championslists_items extends Backend
 		$objListe = $this->Database->prepare("SELECT typ FROM tl_championslists WHERE id=?")
 		                 ->limit(1)
 		                 ->execute($objItem->pid);
+		$GLOBALS['championslist-typ'] = $objListe->typ;
 
 		if($objListe->typ == 'M' || $objListe->typ == 'W')
 		{
 			// Mannschaftsturnier männlich/weiblich
-			$GLOBALS['championslist-typ'] = $objListe->typ;
 			PaletteManipulator::create()
 			    ->removeField('age', 'person1_legend')
 			    ->removeField('clubrating', 'person1_legend')

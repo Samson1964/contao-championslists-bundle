@@ -1,5 +1,10 @@
 # Meisterliste Changelog
 
+## Version 3.4.3 (2024-04-19)
+
+* Change: Hinweis "Bild vorhanden" im Backend mit Prüfung ergänzt, ob die Datei wirklich vorhanden ist
+* Fix: Zuweisung $GLOBALS['championslist-typ'] in checkPalette von tl_championslists_items.php erfolgte an falscher Stelle
+
 ## Version 3.4.2 (2024-04-19)
 
 * Fix: Beim Schreiben mit log_message bei print_r true vergessen
