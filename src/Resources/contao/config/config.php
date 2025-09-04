@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -16,6 +16,13 @@ $GLOBALS['BE_MOD']['content']['championslists'] = array
 	'tables'         => array('tl_championslists', 'tl_championslists_categories', 'tl_championslists_items'),
 	'icon'           => 'bundles/contaochampionslists/images/icon.png',
 );
+
+/**
+ * -------------------------------------------------------------------------
+ * INSERT TAGS
+ * -------------------------------------------------------------------------
+ */
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('Schachbulle\ContaoChampionslistsBundle\Classes\Tags', 'Meister');
 
 /**
  * -------------------------------------------------------------------------

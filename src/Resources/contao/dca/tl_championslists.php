@@ -153,7 +153,7 @@ $GLOBALS['TL_DCA']['tl_championslists'] = array
 			'filter'                  => true,
 			'default'                 => 'E',
 			'inputType'               => 'select',
-			'options'                 => $GLOBALS['TL_LANG']['tl_championslists']['typen'], 
+			'options'                 => &$GLOBALS['TL_LANG']['tl_championslists']['typen'], 
 			'eval'                    => array
 			(
 				'doNotCopy'           => false,

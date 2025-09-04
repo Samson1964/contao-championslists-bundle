@@ -90,6 +90,7 @@ class Champion extends \ContentElement
 					// Datensatz zuweisen
 					$item = array
 					(
+						'id'            => $objItems->id,
 						'number'        => $objItems->number,
 						'year'          => $objItems->year,
 						'place'         => $objItems->place,

@@ -1,5 +1,11 @@
 # Meisterliste Changelog
 
+## Version 3.5.0 (2025-09-04)
+
+* Fix: Warning: Undefined array key "typen" in contao/dca/tl_championslists.php (line 156) -> Zugriff auf Sprachvariable mit Und-Zeichen davor versehen
+* Fix: Warning: Undefined array key "id" in contao/templates/ce_champion_default.html5 (line 6) -> id wurde nicht übergeben
+* Add: Inhaltselement ce_champion (Aktueller Meister) + Inserttag
+ 
 ## Version 3.4.3 (2024-04-19)
 
 * Change: Hinweis "Bild vorhanden" im Backend mit Prüfung ergänzt, ob die Datei wirklich vorhanden ist
