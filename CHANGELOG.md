@@ -1,5 +1,10 @@
 # Meisterliste Changelog
 
+## Version 3.5.1 (2025-09-05)
+
+* Fix: Standardtemplate ce_champion_default kann im Inhaltselement nicht geändert werden -> Template ce_champion_default umbenannt in ce_champion
+* Add: Inhaltselement "Aktueller Meister" -> Bildgrößen in tl_content hinzugefügt, damit ein eigenes Bildformat genutzt werden kann
+
 ## Version 3.5.0 (2025-09-04)
 
 * Fix: Warning: Undefined array key "typen" in contao/dca/tl_championslists.php (line 156) -> Zugriff auf Sprachvariable mit Und-Zeichen davor versehen

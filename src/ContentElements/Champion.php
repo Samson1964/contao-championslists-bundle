@@ -8,7 +8,7 @@ class Champion extends \ContentElement
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'ce_champion_default';
+	protected $strTemplate = 'ce_champion';
 
 	/**
 	 * Generate the module
@@ -44,23 +44,20 @@ class Champion extends \ContentElement
 
 				if($objItems)
 				{
-					// Standardbilddatei und Standardbildmaße festlegen
+					$bildgroesse = unserialize($this->size); // Bildgröße laden
+					// Standardbilddatei festlegen
 					switch($objListe->typ)
 					{
 						case 'E': // Einzelturnier
-							$bildgroesse = unserialize($GLOBALS['TL_CONFIG']['championslists_imageSizePlayer']);
 							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageMen'];
 							break;
 						case 'F': // Einzelturnier (weiblich)
-							$bildgroesse = unserialize($GLOBALS['TL_CONFIG']['championslists_imageSizePlayer']);
 							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageWomen'];
 							break;
 						case 'M': // Mannschaftsturnier
-							$bildgroesse = unserialize($GLOBALS['TL_CONFIG']['championslists_imageSizeTeam']);
 							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageTeamsMen'];
 							break;
 						case 'W': // Mannschaftsturnier (weiblich)
-							$bildgroesse = unserialize($GLOBALS['TL_CONFIG']['championslists_imageSizeTeam']);
 							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageTeamsWomen'];
 							break;
 						default:

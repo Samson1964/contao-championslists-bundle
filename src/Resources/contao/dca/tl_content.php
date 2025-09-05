@@ -4,7 +4,7 @@
  * Paletten
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslist_filter';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['champion'] = '{type_legend},type,headline;{champions_legend},championslist;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['champion'] = '{type_legend},type,headline;{champions_legend},championslist;{sourcesize_legend},size,fullsize;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['championslists_mono'] = '{type_legend},type,headline;{champions_legend},championslist,championslist_filter;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['championslists_multi'] = '{type_legend},type,headline;{champions_legend},championslist,championslist_filter;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{invisible_legend:hide},invisible,start,stop';
 //
