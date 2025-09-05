@@ -83,12 +83,14 @@ class ChampionslistsMono extends \ContentElement
 					{
 						(bcmod($i,2)) ? $class = 'odd' : $class = 'even';
 						$class .= $objItems->failed ? ' failed' : '';
+						$item[$i]['id']                              = $objItems->id;
 						$item[$i]['nummer']                          = $objItems->number;
 						$item[$i]['jahr']                            = $objItems->year;
 						$item[$i]['class']                           = $class;
 						$item[$i]['ort']                             = $objItems->place;
 						$item[$i]['linkurl']                         = $objItems->url;
 						$item[$i]['linkziel']                        = $objItems->target;
+						$item[$i]['name']                            = $objItems->name;
 						$item[$i]['platz']['meister']['name']        = $objItems->name;
 						$item[$i]['platz']['meister']['aufstellung'] = $objItems->nomination;
 						$item[$i]['platz']['meister']['alter']       = $objItems->age;
@@ -128,7 +130,7 @@ class ChampionslistsMono extends \ContentElement
 						$item[$i]['info'] = $objItems->info;
 
 						// Weitere Spieler?
-						if($objItems->platzierungen)
+						if(isset($objItems->platzierungen))
 						{
 							$platzierungen = unserialize($objItems->platzierungen);
 							foreach($platzierungen as $platz)
@@ -154,21 +156,24 @@ class ChampionslistsMono extends \ContentElement
 								$objBild = new \stdClass();
 								\Controller::addImageToTemplate($objBild, array('singleSRC' => $objFile->path, 'size' => $bildgroesse), \Config::get('maxImageWidth'), null, $objFile);
 
-								// Person und Bild zuweisen
-								$item[$i]['platz'][$kategorien[$platz['platz']]] = array
-								(
-									'name'         => $platz['name'],
-									'aufstellung'  => $platz['aufstellung'],
-									'alter'        => $platz['alter'],
-									'verein'       => $platz['verein'],
-									'rating'       => $platz['rating'],
-									'image'        => $objBild->singleSRC,
-									'thumbnail'    => $objBild->src,
-									'imageSize'    => $objBild->imgSize,
-									'imageTitle'   => $objBild->imageTitle,
-									'imageAlt'     => $objBild->alt,
-									'imageCaption' => $objBild->caption,
-								);
+								// Person und Bild zuweisen, wenn Kategorien definiert sind
+								if($kategorien)
+								{
+									$item[$i]['platz'][$kategorien[$platz['platz']]] = array
+									(
+										'name'         => $platz['name'],
+										'aufstellung'  => $platz['aufstellung'],
+										'alter'        => $platz['alter'],
+										'verein'       => $platz['verein'],
+										'rating'       => $platz['rating'],
+										'image'        => $objBild->singleSRC,
+										'thumbnail'    => $objBild->src,
+										'imageSize'    => $objBild->imgSize,
+										'imageTitle'   => $objBild->imageTitle,
+										'imageAlt'     => $objBild->alt,
+										'imageCaption' => $objBild->caption,
+									);
+								}
 							}
 						}
 						$i++;

@@ -4,10 +4,10 @@
 
 <table>
 <?php foreach($this->item as $item): ?>
-	<tr class="item <?php echo $item['class']; ?>">
-		<td><?php echo $item['jahr']; ?></td>
-		<td><?php echo $item['ort']; ?></td>
-		<td><?php echo $item['name']; ?></td>
+	<tr class="item <?= $item['class'] ?>">
+		<td><?= $item['jahr'] ?></td>
+		<td><?= $item['ort'] ?></td>
+		<td><?= $item['name'] ?></td>
 	</tr>
 <?php endforeach; ?>
 </table>

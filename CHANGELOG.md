@@ -1,5 +1,14 @@
 # Meisterliste Changelog
 
+## Version 3.5.2 (2025-09-05)
+
+* Fix: Warning: Undefined array key "" in ContentElements/ChampionslistsMono.php (line 158) 
+* Fix: Warning: Undefined array key "id" in src/Resources/contao/templates/ce_championslists_mono.html5 (line 29) 
+* Fix: Warning: Undefined array key "name" in rc/Resources/contao/templates/ce_championslists_mono_mini.html5 (line 10) 
+* Fix: Template ce_championslists_multi_mini funktioniert nicht: Es wird nur Jahr und Ort angezeigt
+* Fix: Warning: Undefined array key "" in src/ContentElements/ChampionslistsMulti.php (line 155) 
+* Fix: Warning: Undefined array key "id" in /src/Resources/contao/templates/ce_championslists_multi.html5 (line 29) 
+
 ## Version 3.5.1 (2025-09-05)
 
 * Fix: Standardtemplate ce_champion_default kann im Inhaltselement nicht geändert werden -> Template ce_champion_default umbenannt in ce_champion
