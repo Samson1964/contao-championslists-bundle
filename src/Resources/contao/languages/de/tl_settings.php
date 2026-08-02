@@ -1,23 +1,20 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
-/**
- * Contao Open Source CMS
+declare(strict_types=1);
+
+/*
+ * Dieses Bundle stellt die DSB-Meisterlisten für Contao 4.13 und Contao 5 bereit.
  *
- * Copyright (C) 2005-2013 Leo Feyer
- *
- * @package   fen
- * @author    Frank Hoppe
- * @license   GNU/LGPL
- * @copyright Frank Hoppe 2013
+ * @license LGPL-3.0-or-later
  */
 
-/**
- * legends
+/*
+ * Legenden
  */
-$GLOBALS['TL_LANG']['tl_settings']['championslists_legend']                      = 'Meisterlisten';
+$GLOBALS['TL_LANG']['tl_settings']['championslists_legend'] = 'Meisterlisten';
 
-/**
- * fields
+/*
+ * Felder
  */
 $GLOBALS['TL_LANG']['tl_settings']['championslists_imageSizePlayer'] = array('Bildgröße Männer/Frauen', 'Größe des Vorschaubildes für Männer/Frauen');
 $GLOBALS['TL_LANG']['tl_settings']['championslists_imageSizeTeam'] = array('Bildgröße Mannschaften', 'Größe des Vorschaubildes für Mannschaften');

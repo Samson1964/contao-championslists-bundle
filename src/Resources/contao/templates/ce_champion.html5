@@ -2,12 +2,19 @@
 
 <?php $this->block('content'); ?>
 
-	<figure class="image_container">
-		<a href="<?= $this->item['image'] ?>" data-lightbox="championslists<?= $this->item['id'] ?>"><img src="<?= $this->item['thumbnail'] ?>" alt="<?= $this->item['imageAlt'] ?>" title="<?= $this->item['imageTitle'] ?>"<?= $this->item['imageSize'] ?>></a>
-		<?php if ($this->item['imageCaption']): ?>
-			<figcaption class="caption"><?= $this->item['imageCaption'] ?></figcaption>
-		<?php endif; ?>
-	</figure> 
+<?php if ($this->item): ?>
+
+	<?php if ($this->item['thumbnail']): ?>
+		<figure class="image_container">
+			<a href="<?= $this->item['image'] ?>" data-lightbox="championslists<?= $this->item['id'] ?>"><img src="<?= $this->item['thumbnail'] ?>" alt="<?= $this->item['imageAlt'] ?>" title="<?= $this->item['imageTitle'] ?>"<?= $this->item['imageSize'] ?>></a>
+			<?php if ($this->item['imageCaption']): ?>
+				<figcaption class="caption"><?= $this->item['imageCaption'] ?></figcaption>
+			<?php endif; ?>
+		</figure>
+	<?php endif; ?>
+
 	<div><?= $this->item['name'] ?></div>
 
-<?php $this->endblock(); ?>  
+<?php endif; ?>
+
+<?php $this->endblock(); ?>

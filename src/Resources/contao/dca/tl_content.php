@@ -1,19 +1,40 @@
 <?php
 
-/**
- * Paletten
+declare(strict_types=1);
+
+/*
+ * Dieses Bundle stellt die DSB-Meisterlisten für Contao 4.13 und Contao 5 bereit.
+ *
+ * @license LGPL-3.0-or-later
  */
+
+use Contao\Backend;
+use Contao\Database;
+use Contao\DataContainer;
+use Contao\Image;
+use Contao\StringUtil;
+use Contao\System;
+
+/*
+ * Paletten
+ *
+ * Das Feld "guests" gibt es nur bis Contao 4.13. Deshalb wird es nur ergänzt,
+ * wenn der Contao-Kern es bereitstellt (die Kern-DCA wird vor dieser geladen).
+ */
+$strExpert = isset($GLOBALS['TL_DCA']['tl_content']['fields']['guests']) ? 'guests,cssID' : 'cssID';
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'championslist_filter';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['champion'] = '{type_legend},type,headline;{champions_legend},championslist;{sourcesize_legend},size,fullsize;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{invisible_legend:hide},invisible,start,stop';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['championslists_mono'] = '{type_legend},type,headline;{champions_legend},championslist,championslist_filter;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{invisible_legend:hide},invisible,start,stop';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['championslists_multi'] = '{type_legend},type,headline;{champions_legend},championslist,championslist_filter;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{invisible_legend:hide},invisible,start,stop';
-//
+$GLOBALS['TL_DCA']['tl_content']['palettes']['champion'] = '{type_legend},type,headline;{champions_legend},championslist;{sourcesize_legend},size,fullsize;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},'.$strExpert.';{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['championslists_mono'] = '{type_legend},type,headline;{champions_legend},championslist,championslist_filter;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},'.$strExpert.';{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['championslists_multi'] = '{type_legend},type,headline;{champions_legend},championslist,championslist_filter;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},'.$strExpert.';{invisible_legend:hide},invisible,start,stop';
+
+unset($strExpert);
+
 $GLOBALS['TL_DCA']['tl_content']['subpalettes']['championslist_filter'] = 'championsfrom,championsto';
 
-/**
+/*
  * Felder
  */
-
 $GLOBALS['TL_DCA']['tl_content']['fields']['championslist'] = array
 (
 	'label'                    => &$GLOBALS['TL_LANG']['tl_content']['championslist'],
@@ -26,13 +47,13 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['championslist'] = array
 		'multiple'             => false,
 		'chosen'               => true,
 		'submitOnChange'       => true,
-		'tl_class'             => 'w50 wizard'
+		'tl_class'             => 'w50 wizard',
 	),
 	'wizard'                   => array
 	(
-		array('tl_content_championslist', 'editListe')
+		array('tl_content_championslist', 'editListe'),
 	),
-	'sql'                  => "int(10) unsigned NOT NULL default '0'"
+	'sql'                      => "int(10) unsigned NOT NULL default '0'",
 );
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['championslist_filter'] = array
@@ -44,7 +65,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['championslist_filter'] = array
 	(
 		'tl_class'            => 'clr',
 		'isBoolean'           => true,
-		'submitOnChange'      => true
+		'submitOnChange'      => true,
 	),
 	'sql'                     => "char(1) NOT NULL default ''",
 );
@@ -59,9 +80,9 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['championsfrom'] = array
 		'mandatory'           => true,
 		'rgxp'                => 'digit',
 		'tl_class'            => 'w50',
-		'maxlength'           => 4
+		'maxlength'           => 4,
 	),
-	'sql'                     => "varchar(4) NOT NULL default ''"
+	'sql'                     => "varchar(4) NOT NULL default ''",
 );
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['championsto'] = array
@@ -74,60 +95,81 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['championsto'] = array
 		'mandatory'           => true,
 		'rgxp'                => 'digit',
 		'tl_class'            => 'w50',
-		'maxlength'           => 4
+		'maxlength'           => 4,
 	),
-	'sql'                     => "varchar(4) NOT NULL default ''"
+	'sql'                     => "varchar(4) NOT NULL default ''",
 );
 
-/*****************************************
- * Klasse tl_content_championslist
- *****************************************/
-
-class tl_content_championslist extends \Backend
+/**
+ * Stellt die Callbacks der Meisterlisten-Felder in tl_content bereit.
+ */
+class tl_content_championslist extends Backend
 {
-
 	/**
-	 * Import the back end user object
+	 * Erzeugt den Bearbeiten-Link neben der Auswahlliste.
 	 */
-	public function __construct()
+	public function editListe(DataContainer $dc): string
 	{
-		parent::__construct();
-		$this->import('BackendUser', 'User');
-	}
+		$intListe = (int) $dc->value;
 
-	/**
-	 * Funktion editAdresse
-	 * @param \DataContainer
-	 * @return string
-	 */
-	public function editListe(DataContainer $dc)
-	{
-		if ($dc->value < 1)
+		if ($intListe < 1)
 		{
 			return '';
 		}
 
-		$title = sprintf($GLOBALS['TL_LANG']['tl_content']['editalias'], $dc->value);
+		$strTitle = sprintf($GLOBALS['TL_LANG']['tl_content']['editchampionslist'] ?? '%s', $intListe);
 
-		return ' <a href="contao/main.php?do=championslists&amp;table=tl_championslists_items&amp;act=edit&amp;id=' . $dc->value . '&amp;popup=1&amp;nb=1&amp;rt=' . REQUEST_TOKEN . '" title="' . StringUtil::specialchars($title) . '" onclick="Backend.openModalIframe({\'title\':\'' . StringUtil::specialchars(str_replace("'", "\\'", $title)) . '\',\'url\':this.href});return false">' . Image::getHtml('alias.svg', $title) . '</a>';
+		// Ohne act-Parameter wird kein Request-Token benötigt
+		$strHref = System::getContainer()->get('router')->generate('contao_backend', array
+		(
+			'do'    => 'championslists',
+			'table' => 'tl_championslists_items',
+			'id'    => $intListe,
+			'popup' => '1',
+			'nb'    => '1',
+		));
+
+		return ' <a href="'.StringUtil::specialchars($strHref).'" title="'.StringUtil::specialchars($strTitle).'"'
+			.' onclick="Backend.openModalIframe({\'title\':\''.StringUtil::specialchars(str_replace("'", "\\'", $strTitle)).'\',\'url\':this.href});return false">'
+			.Image::getHtml('alias.svg', $strTitle).'</a>';
 	}
 
-	public function getChampionslists(DataContainer $dc)
+	/**
+	 * Liefert die auswählbaren Meisterlisten passend zum Inhaltselement.
+	 *
+	 * Für Mannschaftswettbewerbe stehen nur Listen vom Typ M/W zur Verfügung,
+	 * für alle anderen Elemente nur Listen vom Typ E/F.
+	 *
+	 * @return array<int, string>
+	 */
+	public function getChampionslists(DataContainer $dc): array
 	{
-		// Meisterlisten nach Einzel- (E,F) und Mannschaftswettbewerben (M,W) unterscheiden
-		if($dc->activeRecord->type == 'championslists_multi') $filter = ' WHERE typ = \'M\' OR typ = \'W\'';
-		else $filter = ' WHERE typ = \'E\' OR typ = \'F\'';
+		$arrTypen = 'championslists_multi' === $this->getElementType($dc) ? array('M', 'W') : array('E', 'F');
 
-		$array = array();
-		$objAdresse = $this->Database->prepare("SELECT * FROM tl_championslists".$filter." ORDER BY title ASC")
-		                             ->execute();
+		$objListen = Database::getInstance()
+			->prepare('SELECT id, title FROM tl_championslists WHERE typ IN (?, ?) ORDER BY title ASC')
+			->execute(...$arrTypen);
 
-		while($objAdresse->next())
+		$arrListen = array();
+
+		while ($objListen->next())
 		{
-			$array[$objAdresse->id] = $objAdresse->title;
+			$arrListen[(int) $objListen->id] = (string) $objListen->title;
 		}
-		return $array;
 
+		return $arrListen;
 	}
 
+	/**
+	 * Ermittelt den Typ des aktuell bearbeiteten Inhaltselements.
+	 */
+	private function getElementType(DataContainer $dc): string
+	{
+		$objContent = Database::getInstance()
+			->prepare('SELECT type FROM tl_content WHERE id=?')
+			->limit(1)
+			->execute((int) $dc->id);
+
+		return $objContent->numRows ? (string) $objContent->type : '';
+	}
 }

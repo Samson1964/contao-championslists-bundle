@@ -1,28 +1,45 @@
 {
     "name": "schachbulle/contao-championslists-bundle",
     "type": "contao-bundle",
-    "description": "DSB-Meisterlisten für Contao 4",
+    "description": "DSB-Meisterlisten für Contao 4.13 und Contao 5",
+    "keywords": [
+        "contao",
+        "schach",
+        "meisterliste",
+        "championslists"
+    ],
+    "homepage": "https://github.com/Samson1964/contao-championslists-bundle",
     "license": "LGPL-3.0-or-later",
     "authors": [
         {
-            "name": "Frank Hoppe",
+            "name": "Frank Binding",
             "homepage": "https://www.schachbulle.de/"
         }
     ],
     "require": {
-        "php": "^5.6 || ^7.0 || ^8.0",
-        "contao/core-bundle": "^4",
-        "codefog/contao-haste": "*",
-        "menatwork/contao-multicolumnwizard-bundle": "*",
-        "schachbulle/contao-spielerregister-bundle": "*"
+        "php": "^7.4 || ^8.0",
+        "contao/core-bundle": "^4.13 || ^5.0",
+        "menatwork/contao-multicolumnwizard-bundle": "^3.5",
+        "symfony/config": "^5.4 || ^6.4 || ^7.0",
+        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
+        "symfony/http-kernel": "^5.4 || ^6.4 || ^7.0"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.3.1",
+        "phpunit/phpunit": "^9.5"
     },
     "conflict": {
         "contao/core": "*",
         "contao/manager-plugin": "<2.0 || >=3.0"
     },
-    "require-dev": {
-        "contao/manager-plugin": "^2.0",
-        "doctrine/doctrine-cache-bundle": "^1.3"
+    "suggest": {
+        "schachbulle/contao-spielerregister-bundle": "Verknüpft die Meister mit dem DSB-Spielerregister"
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": true,
+            "contao/manager-plugin": true
+        }
     },
     "extra": {
         "contao-manager-plugin": "Schachbulle\\ContaoChampionslistsBundle\\ContaoManager\\Plugin"
@@ -30,6 +47,11 @@
     "autoload": {
         "psr-4": {
             "Schachbulle\\ContaoChampionslistsBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Schachbulle\\ContaoChampionslistsBundle\\Tests\\": "tests/"
         }
     },
     "support": {

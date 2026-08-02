@@ -1,13 +1,14 @@
-<?php 
+<?php
 
-/**
- * Contao Open Source CMS
- * Copyright (C) 2005-2014 Leo Feyer
+declare(strict_types=1);
+
+/*
+ * Dieses Bundle stellt die DSB-Meisterlisten für Contao 4.13 und Contao 5 bereit.
  *
+ * @license LGPL-3.0-or-later
  */
 
-
-/**
- * Back end modules
+/*
+ * Backend-Module
  */
 $GLOBALS['TL_LANG']['MOD']['championslists'] = array('Meisterlisten', 'Meisterlisten verwalten');

@@ -1,116 +1,129 @@
 <?php
+
+declare(strict_types=1);
+
+/*
+ * Dieses Bundle stellt die DSB-Meisterlisten für Contao 4.13 und Contao 5 bereit.
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Schachbulle\ContaoChampionslistsBundle\ContentElements;
 
-class Champion extends \ContentElement
-{
+use Contao\Config;
+use Contao\ContentElement;
+use Contao\Database;
+use Schachbulle\ContaoChampionslistsBundle\Classes\Helper;
 
+/**
+ * Inhaltselement "Aktueller Meister".
+ *
+ * Gibt den jüngsten Eintrag einer Meisterliste aus, bei dem ein Name hinterlegt
+ * ist. Die Bildgröße wird am Inhaltselement selbst eingestellt.
+ */
+class Champion extends ContentElement
+{
 	/**
-	 * Template
+	 * Template.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'ce_champion';
 
 	/**
-	 * Generate the module
+	 * Stellt den aktuellen Meister für das Template zusammen.
 	 */
-	protected function compile()
+	protected function compile(): void
 	{
-		global $objPage;
+		// Template-Variablen immer vorbelegen, damit das Template auch ohne
+		// gültige Liste keine Warnungen erzeugt
+		$this->Template->id = (int) $this->championslist;
+		$this->Template->title = '';
+		$this->Template->item = array();
 
-		// Adresse aus Datenbank laden, wenn ID übergeben wurde
-		if($this->championslist)
+		$intListe = (int) $this->championslist;
+
+		if ($intListe < 1)
 		{
-
-			// Listentitel laden
-			$objListe = $this->Database->prepare("SELECT * FROM tl_championslists WHERE id=?")
-			                           ->execute($this->championslist);
-
-			// Liste gefunden
-			if($objListe)
-			{
-				// Alternativ-Template zuweisen
-				if($this->championslist_alttemplate) $this->Template = new \FrontendTemplate($this->championstemplate);
-
-				// Restliche Variablen zuweisen
-				$this->Template->id = $this->championslist;
-				$this->Template->title = $objListe->title;
-
-				// Listeneinträge laden
-				$objItems = $this->Database->prepare("SELECT * FROM tl_championslists_items WHERE pid = ? AND published = ? AND name <> ? ORDER BY year DESC")
-				                           ->limit(1)
-				                           ->execute($this->championslist, 1, '');
-
-				$item = array();
-
-				if($objItems)
-				{
-					$bildgroesse = unserialize($this->size); // Bildgröße laden
-					// Standardbilddatei festlegen
-					switch($objListe->typ)
-					{
-						case 'E': // Einzelturnier
-							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageMen'];
-							break;
-						case 'F': // Einzelturnier (weiblich)
-							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageWomen'];
-							break;
-						case 'M': // Mannschaftsturnier
-							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageTeamsMen'];
-							break;
-						case 'W': // Mannschaftsturnier (weiblich)
-							$bild = $GLOBALS['TL_CONFIG']['championslists_defaultImageTeamsWomen'];
-							break;
-						default:
-					}
-
-					// Bild extrahieren
-					if($objItems->singleSRC)
-					{
-						// Foto aus der Datenbank
-						$objFile = \FilesModel::findByPk($objItems->singleSRC);
-						if(!$objFile)
-						{
-							// Model findet keine gültige Datei
-							log_message('Kein gültiges Bild gefunden auf Seite '.$objPage->alias.': '.print_r($objItems->singleSRC, true), 'championslists.log');
-							// Deshalb Standardfoto verwenden
-							$objFile = \FilesModel::findByUuid($bild);
-						}
-					}
-					else
-					{
-						// Standardfoto
-						$objFile = \FilesModel::findByUuid($bild);
-					}
-					$objBild = new \stdClass();
-					\Controller::addImageToTemplate($objBild, array('singleSRC' => $objFile->path, 'size' => $bildgroesse), \Config::get('maxImageWidth'), null, $objFile);
-
-					// Datensatz zuweisen
-					$item = array
-					(
-						'id'            => $objItems->id,
-						'number'        => $objItems->number,
-						'year'          => $objItems->year,
-						'place'         => $objItems->place,
-						'url'           => $objItems->url,
-						'target'        => $objItems->target,
-						'name'          => $objItems->name,
-						'nomination'    => $objItems->nomination,
-						'age'           => $objItems->age,
-						'clubrating'    => $objItems->clubrating,
-						'image'         => $objBild->singleSRC,
-						'thumbnail'     => $objBild->src,
-						'imageSize'     => $objBild->imgSize,
-						'imageTitle'    => $objBild->imageTitle,
-						'imageAlt'      => $objBild->alt,
-						'imageCaption'  => $objBild->caption,
-						'info'          => $objItems->info,
-					);
-
-					$this->Template->item = $item;
-				}
-			}
+			return;
 		}
-		return;
 
+		$objDatabase = Database::getInstance();
+
+		$objListe = $objDatabase
+			->prepare('SELECT * FROM tl_championslists WHERE id=?')
+			->limit(1)
+			->execute($intListe);
+
+		if ($objListe->numRows < 1)
+		{
+			return;
+		}
+
+		$this->Template->title = $objListe->title;
+
+		$objItem = $objDatabase
+			->prepare("SELECT * FROM tl_championslists_items WHERE pid=? AND published='1' AND name!='' ORDER BY year DESC")
+			->limit(1)
+			->execute($intListe);
+
+		if ($objItem->numRows < 1)
+		{
+			return;
+		}
+
+		$arrImage = Helper::getImageData(
+			$objItem->singleSRC,
+			$this->size,
+			$this->getDefaultImage((string) $objListe->typ),
+			'Eintrag-ID '.$objItem->id
+		);
+
+		$this->Template->item = array
+		(
+			'id'           => (int) $objItem->id,
+			'number'       => $objItem->number,
+			'year'         => $objItem->year,
+			'place'        => $objItem->place,
+			'url'          => $objItem->url,
+			'target'       => $objItem->target,
+			'name'         => $objItem->name,
+			'nomination'   => $objItem->nomination,
+			'age'          => $objItem->age,
+			'verein'       => $objItem->verein,
+			'rating'       => $objItem->rating,
+			// Für ältere eigene Templates: Verein und Wertungszahl kombiniert
+			'clubrating'   => trim($objItem->verein.' '.$objItem->rating),
+			'image'        => $arrImage['singleSRC'],
+			'thumbnail'    => $arrImage['src'],
+			'imageSize'    => $arrImage['imgSize'],
+			'imageTitle'   => $arrImage['imageTitle'],
+			'imageAlt'     => $arrImage['alt'],
+			'imageCaption' => $arrImage['caption'],
+			'info'         => $objItem->info,
+		);
+	}
+
+	/**
+	 * Liefert die UUID des Standardbildes zum Listentyp.
+	 *
+	 * @return mixed
+	 */
+	private function getDefaultImage(string $strTyp)
+	{
+		switch ($strTyp)
+		{
+			case 'F': // Einzelturnier (weiblich)
+				return Config::get('championslists_defaultImageWomen') ?: Config::get('championslists_defaultImageMen');
+
+			case 'M': // Mannschaftsturnier
+				return Config::get('championslists_defaultImageTeamsMen');
+
+			case 'W': // Mannschaftsturnier (weiblich)
+				return Config::get('championslists_defaultImageTeamsWomen') ?: Config::get('championslists_defaultImageTeamsMen');
+
+			default: // Einzelturnier
+				return Config::get('championslists_defaultImageMen');
+		}
 	}
 }

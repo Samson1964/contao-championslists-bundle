@@ -1,5 +1,99 @@
 # Meisterliste Changelog
 
+## Version 4.0.0 (2026-08-02)
+
+Umstellung auf Contao 4.13 LTS **und** Contao 5 sowie auf PHP 8. Das Bundle läuft mit
+`contao/core-bundle` `^4.13 || ^5.0` und PHP `^7.4 || ^8.0`.
+
+### Contao 5: entfernte APIs ersetzt
+
+* Change: `Controller::addImageToTemplate()` (in Contao 5 entfernt) durch den
+  `contao.image.studio`-FigureBuilder ersetzt. Nicht verarbeitbare Bilder führen jetzt zum
+  Standardbild statt zu einer Ausnahme.
+* Change: `log_message()` (in Contao 5 entfernt) durch das Contao-Systemprotokoll
+  (Monolog-Kanal `contao`) ersetzt. Meldungen erscheinen jetzt im Backend unter „System-Log“.
+* Change: `specialchars()` durch `StringUtil::specialchars()` ersetzt.
+* Change: Alle Klassenzugriffe auf voll qualifizierte Namen umgestellt (`Contao\...`), da
+  Contao 5 die globalen Klassen-Aliase nicht mehr registriert.
+* Change: `'dataContainer' => 'Table'` durch `DC_Table::class` ersetzt.
+* Change: Die Auswahllisten der Bildgrößen in den Einstellungen holen den Dienst jetzt unter
+  seinem aktuellen Namen `contao.image.sizes`. Der bisher benutzte Name
+  `contao.image.image_sizes` ist in Contao 5 entfernt und ließ die Einstellungsseite mit
+  „You have requested a non-existent service“ abbrechen; unter Contao 4.13 ist er nur ein
+  Alias auf denselben Dienst.
+* Change: GIF-Symbole der Backend-Operationen durch SVG-Symbole ersetzt.
+* Change: Der Bearbeiten-Link an der Meisterlisten-Auswahl in `tl_content` nutzt jetzt die
+  Backend-Route statt `contao/main.php` und der entfallenen Konstante `REQUEST_TOKEN`.
+* Delete: `TL_ROOT`-Zugriffsschutz und die Abfrage der entfallenen Konstanten
+  `VERSION`/`BUILD` entfernt.
+* Change: Das nur bis Contao 4.13 vorhandene Feld `guests` wird in den Paletten der
+  Inhaltselemente nur noch ergänzt, wenn der Contao-Kern es bereitstellt.
+* Delete: `runonce_org.php` entfernt (einmalige Datenstruktur-Umstellung aus Version 3.0).
+
+### Abhängigkeiten
+
+* Delete: Abhängigkeit `codefog/contao-haste` entfernt. Der Veröffentlichen-Schalter nutzt
+  jetzt den Contao-eigenen Toggle (`act=toggle&field=published`), den Contao 4.13 und
+  Contao 5 mitbringen.
+* Change: `schachbulle/contao-spielerregister-bundle` ist nur noch eine Empfehlung
+  (`suggest`) statt einer harten Abhängigkeit, weil es noch nicht Contao-5-fähig ist. Ist es
+  installiert, funktioniert die Verknüpfung unverändert; sonst bleiben die Auswahllisten leer.
+* Change: `menatwork/contao-multicolumnwizard-bundle` auf `^3.5` festgelegt.
+
+### Fehlerbehebungen
+
+* Fix: Der Listentyp wurde in der Übersicht der Listeneinträge falsch ermittelt (`$dc->id` ist
+  dort die ID der Meisterliste, nicht die des Eintrags). Dadurch wurden bei
+  Mannschaftsturnieren die falschen Symbole angezeigt.
+* Fix: Bei Mannschaftsturnieren wurden „Verein/Ort“ und „Wertungszahl“ weiterhin in der
+  Palette angezeigt, weil noch das längst entfernte Feld `clubrating` ausgeblendet wurde.
+* Fix: Das Alias eines Platzierungsnamens wurde nicht zuverlässig auf Eindeutigkeit geprüft
+  (Vergleich `numRows > 1` statt Ausschluss des eigenen Datensatzes).
+* Fix: Ohne gültige Meisterliste war `$this->item` im Template nicht gesetzt, was zu
+  „Undefined property“ und einem `foreach` über `null` führte.
+* Fix: Fehlt das Standardbild in den Systemeinstellungen, wurde auf `null` zugegriffen
+  („Attempt to read property on null“). Jetzt werden leere Bilddaten geliefert.
+* Fix: Platzierungen mit gelöschter oder leerer Kategorie erzeugten „Undefined array key“ und
+  werden nun übersprungen.
+* Fix: `unserialize()` auf leere Blob-Felder erzeugte Warnungen; ersetzt durch
+  `StringUtil::deserialize()`.
+* Fix: `bcmod()` (benötigt die BCMath-Erweiterung) durch den Modulo-Operator ersetzt.
+* Fix: Die Jahresfilter-Abfrage setzte Von/Bis direkt in das SQL ein; die Werte werden jetzt
+  als Parameter übergeben.
+* Fix: Das Inhaltselement „Aktueller Meister“ gab das nicht mehr vorhandene Feld `clubrating`
+  aus. Das Template erhält jetzt `verein` und `rating`; `clubrating` bleibt als kombinierter
+  Wert für ältere eigene Templates erhalten.
+* Fix: Die Kopieren- und Löschen-Schaltflächen der Meisterlisten prüften die Berechtigung für
+  Nachrichten-Archive (`newp`). Die falschen Prüfungen wurden entfernt.
+* Fix: Bildauswahl der weiteren Platzierungen auf Bilddateien eingeschränkt.
+* Fix: Bei nicht geladener Sprachdatei erzeugten die Fehlermeldungen zum Kategorie-Alias
+  unter `strict_types` einen TypeError, weil `sprintf()` mit `null` aufgerufen wurde.
+  Gleiches galt für die Umstellung des Feldlabels auf Mannschaften.
+* Fix: Fehlende Bilder werden nur noch einmal je Datei protokolliert statt einmal je
+  Listeneintrag. Im Test mit 2464 Einträgen sank die Zahl der Protokollzeilen von 744 auf
+  404 – genau die Zahl der tatsächlich fehlenden Dateien.
+
+### Code-Optimierung
+
+* Change: Der doppelte Code der Inhaltselemente „Einzelwettbewerb“ und
+  „Mannschaftswettbewerb“ liegt jetzt in der gemeinsamen Basisklasse
+  `ContentElements\AbstractChampionslists`.
+* Change: Der Inserttag `{{meister::...}}` wird als Service über den Tag `contao.hook`
+  registriert statt über `config.php`; die Klasse `Classes\Tags` wurde durch
+  `EventListener\InsertTagsListener` ersetzt.
+* Change: `declare(strict_types=1)`, Typ- und Rückgabetypen sowie deutsche Kommentare in
+  allen Dateien.
+* Change: Kategorien werden pro Request nur noch einmal abgefragt.
+* Add: PHPUnit-Testsuite unter `tests/` samt `phpunit.xml.dist` (35 Tests).
+* Delete: Nicht mehr verwendete Sprachschlüssel (Personen 2–6, `clubrating`, `templatefile`)
+  entfernt.
+
+### Hinweise zur Aktualisierung
+
+* Nach dem Update den Produktions-Cache neu aufbauen (`services.yaml` ist neu hinzugekommen).
+* Wer eigene Templates mit dem Präfix `ce_champion` nutzt: `clubrating` funktioniert weiterhin,
+  besser sind aber die getrennten Felder `verein` und `rating`.
+
 ## Version 3.5.2 (2025-09-05)
 
 * Fix: Warning: Undefined array key "" in ContentElements/ChampionslistsMono.php (line 158) 
