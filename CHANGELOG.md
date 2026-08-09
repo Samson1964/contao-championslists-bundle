@@ -1,5 +1,20 @@
 # Meisterliste Changelog
 
+## Version 4.0.1 (2026-08-03)
+
+**Wichtig beim Aktualisieren:** Die vier Standardbilder in den Einstellungen müssen einmal
+neu ausgewählt und gespeichert werden. Die bisher gespeicherten Werte sind beschädigt und
+werden durch das Update nicht repariert.
+
+* Fix: Die vier Standardbilder (Einstellungen, Bereich Meisterlisten) blieben im Frontend
+  wirkungslos. Der Dateibaum liefert die Kennung der Datei als 16 Byte langen Binärwert; die
+  Einstellungen landen aber in `system/config/localconfig.php`, also in einer PHP-Datei mit
+  einfach gequoteten Zeichenketten. Nullbytes und Backslashes überleben das nicht — aus 16
+  Byte wurden beim Zurücklesen 19, und die Datei war über ihre Kennung nicht mehr
+  auffindbar. Ein `save_callback` legt die Kennung jetzt in der lesbaren Schreibweise ab,
+  die `FilesModel` ebenso versteht. Der Fehler fiel nicht auf, weil im Backend weiterhin ein
+  Bild ausgewählt aussah.
+
 ## Version 4.0.0 (2026-08-02)
 
 Umstellung auf Contao 4.13 LTS **und** Contao 5 sowie auf PHP 8. Das Bundle läuft mit

@@ -9,7 +9,9 @@ declare(strict_types=1);
  */
 
 use Contao\BackendUser;
+use Contao\StringUtil;
 use Contao\System;
+use Contao\Validator;
 
 /*
  * Paletten
@@ -30,6 +32,20 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_defaultImageMen'] = 
 		'extensions'          => 'jpg,jpeg,png,gif,webp',
 		'tl_class'            => 'w50 clr',
 	),
+	// Der Dateibaum liefert die UUID als 16 Byte Binärwert. Die Einstellungen
+	// landen aber in system/config/localconfig.php, also in einer PHP-Datei,
+	// die den Binärwert nicht unbeschadet übersteht: Nullbytes und Backslashes
+	// gehen dabei verloren, und FilesModel::findByUuid() findet die Datei
+	// später nicht mehr. Deshalb wird hier in die lesbare Schreibweise
+	// umgewandelt, die findByUuid() ebenso versteht. Gilt für alle vier
+	// Standardbild-Felder dieser Datei.
+	'save_callback' => array
+	(
+		static function ($varValue)
+		{
+			return Validator::isBinaryUuid($varValue) ? StringUtil::binToUuid($varValue) : $varValue;
+		},
+	),
 );
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_defaultImageWomen'] = array
@@ -42,6 +58,14 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_defaultImageWomen'] 
 		'fieldType'           => 'radio',
 		'extensions'          => 'jpg,jpeg,png,gif,webp',
 		'tl_class'            => 'w50',
+	),
+	// Umwandlung der binären UUID, siehe Hinweis beim ersten Standardbild-Feld
+	'save_callback' => array
+	(
+		static function ($varValue)
+		{
+			return Validator::isBinaryUuid($varValue) ? StringUtil::binToUuid($varValue) : $varValue;
+		},
 	),
 );
 
@@ -56,6 +80,14 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_defaultImageTeamsMen
 		'extensions'          => 'jpg,jpeg,png,gif,webp',
 		'tl_class'            => 'w50 clr',
 	),
+	// Umwandlung der binären UUID, siehe Hinweis beim ersten Standardbild-Feld
+	'save_callback' => array
+	(
+		static function ($varValue)
+		{
+			return Validator::isBinaryUuid($varValue) ? StringUtil::binToUuid($varValue) : $varValue;
+		},
+	),
 );
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_defaultImageTeamsWomen'] = array
@@ -68,6 +100,14 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['championslists_defaultImageTeamsWom
 		'fieldType'           => 'radio',
 		'extensions'          => 'jpg,jpeg,png,gif,webp',
 		'tl_class'            => 'w50',
+	),
+	// Umwandlung der binären UUID, siehe Hinweis beim ersten Standardbild-Feld
+	'save_callback' => array
+	(
+		static function ($varValue)
+		{
+			return Validator::isBinaryUuid($varValue) ? StringUtil::binToUuid($varValue) : $varValue;
+		},
 	),
 );
 

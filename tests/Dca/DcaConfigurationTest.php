@@ -12,6 +12,8 @@ namespace Schachbulle\ContaoChampionslistsBundle\Tests\Dca;
 
 use Contao\DataContainer;
 use Contao\DC_Table;
+use Contao\StringUtil;
+use Contao\Validator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -192,6 +194,53 @@ class DcaConfigurationTest extends TestCase
 		{
 			$this->assertArrayHasKey($strField, self::$arrDca['tl_settings']['fields'], $strField);
 			$this->assertStringContainsString($strField, self::$arrDca['tl_settings']['palettes']['default'], $strField);
+		}
+	}
+
+	/**
+	 * Die vier Standardbilder legen ihre Datei-Kennung in der lesbaren
+	 * Schreibweise ab.
+	 *
+	 * Der Dateibaum liefert die Kennung als 16 Byte langen Binärwert. Die
+	 * Einstellungen landen aber in einer PHP-Datei mit einfach gequoteten
+	 * Zeichenketten, in der Nullbytes und Backslashes verloren gehen — der Wert
+	 * käme beschädigt zurück und die Datei wäre nicht mehr auffindbar. Der
+	 * save_callback muss deshalb umwandeln, ohne dabei einen bereits lesbaren
+	 * oder einen leeren Wert anzutasten.
+	 */
+	public function testStandardbilderWerdenLesbarGespeichert(): void
+	{
+		// Enthält bewusst 0x00 und 0x5c, also genau die kritischen Bytes
+		$strUuid = '5c00335c-8eb1-11f1-af96-005c97f36200';
+		$binUuid = StringUtil::uuidToBin($strUuid);
+
+		foreach (array('championslists_defaultImageMen', 'championslists_defaultImageWomen', 'championslists_defaultImageTeamsMen', 'championslists_defaultImageTeamsWomen') as $strField)
+		{
+			$arrCallbacks = self::$arrDca['tl_settings']['fields'][$strField]['save_callback'] ?? array();
+
+			$this->assertNotEmpty($arrCallbacks, $strField);
+
+			// Die Rückrufe nacheinander anwenden, wie DC_File es tut
+			$fnAnwenden = static function ($varValue) use ($arrCallbacks) {
+				foreach ($arrCallbacks as $callback)
+				{
+					$varValue = $callback($varValue);
+				}
+
+				return $varValue;
+			};
+
+			$varGespeichert = $fnAnwenden($binUuid);
+
+			$this->assertSame($strUuid, $varGespeichert, $strField);
+			$this->assertTrue(Validator::isStringUuid($varGespeichert), $strField);
+			$this->assertSame($binUuid, StringUtil::uuidToBin($varGespeichert), $strField);
+
+			// Ein zweiter Durchlauf darf nichts mehr verändern
+			$this->assertSame($strUuid, $fnAnwenden($strUuid), $strField);
+
+			// Kein Bild ausgewählt
+			$this->assertSame('', $fnAnwenden(''), $strField);
 		}
 	}
 
