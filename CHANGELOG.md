@@ -1,5 +1,17 @@
 # Meisterliste Changelog
 
+## Version 4.0.2 (2026-08-27)
+
+* Fix: Datensätze aus der Zeit, in der die Spalte `singleSRC` noch nicht NULL-fähig war,
+  enthalten statt eines leeren Wertes 16 Nullbytes (MySQL füllt eine leere BINARY-Spalte so
+  auf; eine spätere Spaltenänderung auf NULL korrigiert bereits gespeicherte Werte nicht
+  rückwirkend). Diese 16 Nullbytes wurden bislang wie eine echte, aber nicht auffindbare
+  Bild-Kennung behandelt: Bei jedem Seitenaufruf wurde `FilesModel` erfolglos befragt und
+  eine Fehlermeldung ins Systemprotokoll geschrieben. Auf schachbund.de betraf das 262
+  Einträge und erzeugte entsprechend viele Protokollzeilen pro Tag. Der Sonderfall wird jetzt
+  wie "kein Bild ausgewählt" behandelt: kein Zugriff auf `FilesModel`, keine Protokollzeile,
+  sofort das Standardbild.
+
 ## Version 4.0.1 (2026-08-03)
 
 **Wichtig beim Aktualisieren:** Die vier Standardbilder in den Einstellungen müssen einmal

@@ -59,4 +59,20 @@ class HelperTest extends TestCase
 			$this->assertSame('', $arrImage[$strKey]);
 		}
 	}
+
+	/**
+	 * Altdatensätze aus der Zeit, in der singleSRC noch NOT NULL war, enthalten
+	 * 16 Nullbytes statt NULL (MySQL füllt eine leere BINARY-Spalte so auf).
+	 * Das muss wie "kein Bild ausgewählt" behandelt werden, ohne einen
+	 * FilesModel-Aufruf oder eine Protokollmeldung auszulösen. Ohne Fallback
+	 * lässt sich das ohne gebootetes Contao prüfen: Findet getImageData() den
+	 * Sonderfall nicht, bricht der Aufruf an System::getContainer() ab statt
+	 * still die leeren Bilddaten zu liefern.
+	 */
+	public function testNullByteUuidGiltAlsKeinBild(): void
+	{
+		$strNullUuid = str_repeat("\0", 16);
+
+		$this->assertSame(Helper::getEmptyImageData(), Helper::getImageData($strNullUuid));
+	}
 }

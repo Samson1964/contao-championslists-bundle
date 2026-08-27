@@ -40,6 +40,19 @@ class Helper
 	private static $arrLogged = array();
 
 	/**
+	 * Sentinel für "kein Bild ausgewählt" in älteren Datensätzen.
+	 *
+	 * Die Spalte singleSRC ist heute "binary(16) NULL", war es aber nicht
+	 * immer. Solange sie NOT NULL war, füllte MySQL einen leeren BINARY-Wert
+	 * automatisch mit 16 Nullbytes statt NULL zu speichern; eine spätere
+	 * Umstellung der Spalte auf NULL ändert diese bereits gespeicherten Werte
+	 * nicht rückwirkend. Ohne diese Erkennung versucht Helper::getImageData()
+	 * für jeden dieser Altdatensätze eine nie auffindbare Datei zu laden und
+	 * protokolliert das als Fehler.
+	 */
+	private const NULL_UUID = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+
+	/**
 	 * Liefert die Aliase der Kategorien, indiziert nach Kategorie-ID.
 	 *
 	 * @return array<int, string>
@@ -76,6 +89,11 @@ class Helper
 	public static function getImageData($varUuid, $varSize = null, $varFallbackUuid = null, string $strContext = ''): array
 	{
 		$strSuffix = $strContext ? ' ('.$strContext.')' : '';
+
+		if (self::NULL_UUID === $varUuid)
+		{
+			$varUuid = null;
+		}
 
 		if ($varUuid)
 		{
