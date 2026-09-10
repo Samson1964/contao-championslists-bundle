@@ -15,6 +15,7 @@ use Contao\Database;
 use Contao\FilesModel;
 use Contao\StringUtil;
 use Contao\System;
+use Psr\Log\LogLevel;
 
 /**
  * Sammlung wiederverwendbarer Hilfsfunktionen der Meisterlisten.
@@ -106,8 +107,13 @@ class Helper
 
 			// Der Sperrschlüssel enthält bewusst nur die UUID: Verweisen hundert
 			// Einträge auf dieselbe fehlende Datei, genügt eine Meldung.
+			//
+			// Schweregrad WARNING statt ERROR: Ein einzelner Eintrag mit einer
+			// veralteten oder gelöschten Bildreferenz ist eine erwartbare
+			// Alltäglichkeit bei einer über Jahre gepflegten Liste, kein
+			// Anwendungsfehler - die Seite rendert korrekt mit dem Standardbild.
 			$strUuid = self::formatUuid($varUuid);
-			self::log('Kein gültiges Bild gefunden'.$strSuffix.': '.$strUuid, 'bild:'.$strUuid);
+			self::log('Kein gültiges Bild gefunden'.$strSuffix.': '.$strUuid, 'bild:'.$strUuid, LogLevel::WARNING);
 		}
 
 		// Standardbild als Rückfallebene verwenden
@@ -264,11 +270,17 @@ class Helper
 	 * mehrere hundert Einträge enthalten, die alle auf dieselbe fehlende Datei
 	 * zeigen – ohne diese Sperre liefe das Protokoll bei jedem Seitenaufruf voll.
 	 *
+	 * Die Kontext-Aktion wird bewusst nicht gesetzt: Contaos eigener
+	 * ContaoTableProcessor leitet sie selbst aus dem Schweregrad ab (ab "error"
+	 * aufwärts "ERROR", sonst "GENERAL") - genau wie der Contao-Kern es an
+	 * eigenen Stellen macht.
+	 *
 	 * @param string      $strMessage Die Meldung für das Protokoll
 	 * @param string|null $strKey     Sperrschlüssel; ohne Angabe gilt die Meldung
 	 *                                selbst als Schlüssel
+	 * @param string      $strLevel   PSR-3-Schweregrad (Konstante aus Psr\Log\LogLevel)
 	 */
-	public static function log(string $strMessage, ?string $strKey = null): void
+	public static function log(string $strMessage, ?string $strKey = null, string $strLevel = LogLevel::ERROR): void
 	{
 		$strKey = $strKey ?? $strMessage;
 
@@ -286,9 +298,10 @@ class Helper
 			return;
 		}
 
-		$container->get('monolog.logger.contao')->error(
+		$container->get('monolog.logger.contao')->log(
+			$strLevel,
 			$strMessage,
-			array('contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR))
+			array('contao' => new ContaoContext(__METHOD__))
 		);
 	}
 }

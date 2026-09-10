@@ -1,7 +1,7 @@
 {
     "name": "schachbulle/contao-championslists-bundle",
     "type": "contao-bundle",
-    "description": "DSB-Meisterlisten für Contao 4.13 und Contao 5",
+    "description": "Verwaltung von Siegerlisten von Schachturnieren für Contao 4.13 und Contao 5",
     "keywords": [
         "contao",
         "schach",

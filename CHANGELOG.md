@@ -1,5 +1,20 @@
 # Meisterliste Changelog
 
+## Version 4.0.3 (2026-09-10)
+
+* Change: "Kein gültiges Bild gefunden" für einen einzelnen Listeneintrag mit einer echten,
+  aber tatsächlich gelöschten Bild-Kennung (anders als der Nullbyte-Sentinel aus 4.0.2) wird
+  jetzt als WARNING statt ERROR protokolliert. Ein einzelner veralteter Bildverweis in einer
+  über Jahre gepflegten Liste ist eine erwartbare Alltäglichkeit, kein Anwendungsfehler – die
+  Seite rendert korrekt mit dem Standardbild. Die Kontext-Aktion wird dazu nicht mehr fest auf
+  "ERROR" gesetzt, sondern von Contao selbst aus dem Schweregrad abgeleitet ("GENERAL" für
+  WARNING und darunter, "ERROR" für höhere Stufen) – genau das Muster, das der Contao-Kern an
+  eigenen Stellen verwendet. Ein tatsächlich kaputtes Standardbild (Systemeinstellungen)
+  bleibt bewusst bei ERROR, da das ein selteneres, admin-relevantes Konfigurationsproblem ist.
+* Fix: `Helper::log()` verarbeitet den Schweregrad jetzt als PSR-3-Parameter
+  (`Psr\Log\LogLevel::*`), sodass sich künftige Aufrufer nicht mehr auf ERROR festlegen
+  müssen.
+
 ## Version 4.0.2 (2026-08-27)
 
 * Fix: Datensätze aus der Zeit, in der die Spalte `singleSRC` noch nicht NULL-fähig war,

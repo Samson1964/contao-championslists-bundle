@@ -3,6 +3,9 @@
 /vendor/
 /.DAV
 
+# Private Arbeitsnotiz, nicht versioniert
+/TODO.md
+
 # PhpUnit
 /phpunit.xml
 /.phpunit.result.cache
