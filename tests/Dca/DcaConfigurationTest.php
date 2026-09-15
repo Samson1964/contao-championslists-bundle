@@ -259,6 +259,20 @@ class DcaConfigurationTest extends TestCase
 	}
 
 	/**
+	 * Die Aufstellung soll echte HTML-Auszeichnung erlauben (z. B. <strong>,
+	 * Links). Das Standard-Template wandelt reine Zeilenumbrüche zusätzlich
+	 * per nl2br() um; ohne "allowHtml" würde Contao Zeichen wie "<" beim
+	 * Speichern in HTML-Entitäten umwandeln.
+	 */
+	public function testAufstellungErlaubtHtml(): void
+	{
+		$this->assertTrue(self::$arrDca['tl_championslists_items']['fields']['nomination']['eval']['allowHtml'] ?? false);
+
+		$arrSpalten = self::$arrDca['tl_championslists_items']['fields']['platzierungen']['eval']['columnFields'];
+		$this->assertTrue($arrSpalten['aufstellung']['eval']['allowHtml'] ?? false);
+	}
+
+	/**
 	 * Das Spielerregister-Bundle ist optional. Die Optionen dürfen deshalb nur
 	 * über den eigenen Callback geladen werden, der die Installation prüft.
 	 */

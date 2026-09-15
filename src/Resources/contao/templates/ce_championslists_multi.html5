@@ -33,7 +33,7 @@
 			<?php endif; ?>
 			<p class="mannschaft">
 				<span class="name"><?= $item['platz']['meister']['name'] ?></span>
-				<span class="aufstellung"><?= $item['platz']['meister']['aufstellung'] ?></span>
+				<span class="aufstellung"><?= nl2br($item['platz']['meister']['aufstellung']) ?></span>
 			</p>
 			<?php if ($item['info']): ?>
 				<p class="text"><?= $item['info'] ?></p>

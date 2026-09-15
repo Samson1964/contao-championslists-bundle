@@ -58,7 +58,9 @@ class ChampionslistsMulti extends AbstractChampionslists
 		return array
 		(
 			'name'        => $objItem->name,
-			'aufstellung' => $objItem->nomination,
+			// Die Spalte ist NULL-fähig; das Template wandelt Zeilenumbrüche per
+			// nl2br() um, das seit PHP 8.1 keinen null-Wert mehr akzeptiert.
+			'aufstellung' => (string) $objItem->nomination,
 		);
 	}
 

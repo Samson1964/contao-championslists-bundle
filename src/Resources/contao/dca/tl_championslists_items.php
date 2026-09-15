@@ -415,6 +415,10 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 							'class'               => 'noresize',
 							'columnPos'           => 'spalte2',
 							'style'               => 'width:350px',
+							// Siehe Feld "nomination" weiter oben: erlaubt echte
+							// HTML-Auszeichnung, Zeilenumbrüche bleiben davon
+							// unabhängig erhalten.
+							'allowHtml'           => true,
 						),
 						'explanation'             => 'insertTags',
 					),
@@ -432,6 +436,12 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 			(
 				'class'               => 'clr noresize',
 				'helpwizard'          => true,
+				// Erlaubt echte HTML-Auszeichnung (z. B. <strong>, <a>) in der
+				// Aufstellung. Zeilenumbrüche werden davon unabhängig immer
+				// gespeichert; das Standard-Template wandelt sie zusätzlich per
+				// nl2br() in <br> um, damit eine einfache Mannschaftsaufstellung
+				// auch ohne HTML-Kenntnisse korrekt umbricht.
+				'allowHtml'           => true,
 			),
 			'explanation'             => 'insertTags',
 			'sql'                     => "mediumtext NULL",

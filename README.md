@@ -63,6 +63,12 @@ Jede Platzierung unter `platz` enthält `name`, `aufstellung`, `image`, `thumbna
 `imageSize`, `imageTitle`, `imageAlt` und `imageCaption`; bei Einzelwettbewerben zusätzlich
 `alter`, `verein` und `rating`.
 
+`aufstellung` erlaubt echte HTML-Auszeichnung (das Feld heißt im Backend „Aufstellung“ bzw.
+„Aufstellung der Mannschaft“). Zeilenumbrüche aus einer einfachen mehrzeiligen Eingabe bleiben
+als `\n` erhalten; das mitgelieferte Standard-Template gibt sie über `nl2br()` aus. Ein eigenes
+Template sollte das ebenso tun, sonst laufen mehrzeilige Aufstellungen im HTML zu einer Zeile
+zusammen.
+
 ### Aktueller Meister (`champion`)
 
 Gibt den jüngsten Eintrag einer Meisterliste aus, bei dem das Feld „Name“ gefüllt ist. Die
@@ -77,6 +83,10 @@ Im Template steht `$this->item` mit diesen Schlüsseln bereit:
 * `clubrating` (Verein und Wertungszahl kombiniert, für ältere eigene Templates)
 * `image`, `thumbnail`, `imageSize`, `imageTitle`, `imageAlt`, `imageCaption`
 * `info`
+
+Für `nomination` gilt dieselbe Anmerkung wie für `aufstellung` oben: HTML ist erlaubt,
+Zeilenumbrüche bleiben als `\n` erhalten und müssen im Template per `nl2br()` ausgegeben
+werden. Das mitgelieferte Standard-Template `ce_champion` zeigt nur den Namen an.
 
 ### Ausgabe des Meisters mit Inserttag
 

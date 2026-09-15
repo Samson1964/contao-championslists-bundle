@@ -1,5 +1,20 @@
 # Meisterliste Changelog
 
+## Version 4.1.0 (2026-09-15)
+
+* Add: Die Felder „Aufstellung" (Turniersieger) und „Aufstellung (nur Mannschaften)" (weitere
+  Platzierungen) erlauben jetzt echte HTML-Auszeichnung (`allowHtml`), z. B. `<strong>` oder
+  Links.
+* Fix: Eine einfache, mehrzeilige Mannschaftsaufstellung ohne HTML lief im Frontend zu einer
+  einzigen Zeile zusammen. Contao speichert Zeilenumbrüche in einem Textarea-Feld unverändert
+  als `\n` – dieses Zeichen hat aber keine Bedeutung in HTML und wird vom Browser als
+  gewöhnliches Leerzeichen behandelt. Das Standard-Template `ce_championslists_multi` gibt die
+  Aufstellung jetzt über `nl2br()` aus, damit jede Zeile sichtbar bleibt. Eigene Templates
+  müssen das für `aufstellung` bzw. `nomination` selbst nachziehen (siehe README).
+* Change: `nomination` wird jetzt konsequent als String geliefert (`(string)`-Cast), nicht mehr
+  als `null` bei einem leeren Feld – nötig, damit `nl2br()` in eigenen Templates nicht an der
+  seit PHP 8.1 verbotenen `null`-Übergabe scheitert.
+
 ## Version 4.0.3 (2026-09-10)
 
 * Change: "Kein gültiges Bild gefunden" für einen einzelnen Listeneintrag mit einer echten,

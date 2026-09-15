@@ -58,7 +58,9 @@ class ChampionslistsMono extends AbstractChampionslists
 		return array
 		(
 			'name'        => $objItem->name,
-			'aufstellung' => $objItem->nomination,
+			// Die Spalte ist NULL-fähig; als String liefern, damit eigene
+			// Templates gefahrlos nl2br() darauf anwenden können.
+			'aufstellung' => (string) $objItem->nomination,
 			'alter'       => $objItem->age,
 			'verein'      => $objItem->verein,
 			'rating'      => $objItem->rating,

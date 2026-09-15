@@ -88,7 +88,9 @@ class Champion extends ContentElement
 			'url'          => $objItem->url,
 			'target'       => $objItem->target,
 			'name'         => $objItem->name,
-			'nomination'   => $objItem->nomination,
+			// Die Spalte ist NULL-fähig; als String liefern, damit eigene
+			// Templates gefahrlos nl2br() darauf anwenden können.
+			'nomination'   => (string) $objItem->nomination,
 			'age'          => $objItem->age,
 			'verein'       => $objItem->verein,
 			'rating'       => $objItem->rating,
