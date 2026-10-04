@@ -30,6 +30,50 @@ Das Backend-Modul *Meisterlisten* enthält drei Bereiche:
 * **Platzierungsnamen** – die Kategorien der weiteren Platzierungen. Das Alias `meister` ist
   für den Turniersieger reserviert und kann nicht vergeben werden.
 
+## Rechte
+
+Der Zugriff lässt sich je Meisterliste vergeben – nach demselben Muster wie bei den
+Nachrichtenarchiven. In der Benutzergruppe (und beim Benutzer, sofern er eigene Rechte hat)
+gibt es dafür den Abschnitt *Meisterlisten-Rechte* mit zwei Feldern:
+
+| Feld | Wirkung |
+|---|---|
+| **Erlaubte Meisterlisten** | Nur diese Listen erscheinen in der Übersicht. Ihre Einträge lassen sich anlegen, bearbeiten, verschieben, kopieren und löschen. |
+| **Meisterlisten-Rechte** | *Anlegen* erlaubt neue Listen und das Kopieren ganzer Listen, *Löschen* das Entfernen ganzer Listen. |
+
+Dazu gilt:
+
+* Voraussetzung bleibt das Backend-Modul *Meisterlisten* unter den erlaubten Modulen.
+* Administratoren sehen und dürfen immer alles.
+* Wer eine Liste anlegt oder kopiert, bekommt sie automatisch freigeschaltet. Eingetragen wird
+  sie dort, wo das Recht *Anlegen* herkommt – bei der Gruppe ebenso wie beim Benutzer. Die
+  Kollegen derselben Gruppe sehen die neue Liste damit auch.
+* Geprüft wird immer die Liste, zu der ein Eintrag gehört, und beim Verschieben oder Kopieren
+  zusätzlich die Ziel-Liste. Ein von Hand eingegebener Link auf eine fremde Liste endet mit
+  „Zugriff verweigert“.
+* Die *Platzierungsnamen* hängen an keiner einzelnen Liste, sondern gelten für alle. Sie
+  bleiben für jeden bearbeitbar, der das Modul hat.
+* **Contao 5.7 und neuer** kennt zusätzlich die allgemeinen *Tabellenrechte* am Benutzer
+  bzw. an der Gruppe. Beide Ebenen müssen zustimmen: Wer dort für
+  `tl_championslists` oder `tl_championslists_items` kein Anlegen/Ändern/Löschen hat, kann es
+  auch mit den Meisterlisten-Rechten nicht.
+
+### Aktualisierung von einer Fassung vor 4.2
+
+Bis 4.1 durfte jeder mit dem Modul *Meisterlisten* alle Listen bearbeiten. Damit nach dem
+Update niemand vor einer leeren Übersicht steht, überführt eine Migration den bisherigen
+Stand: Jede Gruppe und jeder Benutzer mit eigenem Modulrecht bekommt alle vorhandenen Listen
+sowie *Anlegen* und *Löschen*. Sie läuft genau einmal, zusammen mit der
+Datenbank-Aktualisierung:
+
+```bash
+php vendor/bin/contao-console cache:clear
+php vendor/bin/contao-console contao:migrate
+```
+
+Im Contao Manager erledigt das der Schritt *Datenbank aktualisieren*. Danach lassen sich die
+Rechte in den Gruppen gezielt einschränken.
+
 ## Inhaltselemente
 
 Alle Elemente liegen unter *Schach-Elemente*.

@@ -25,6 +25,19 @@ $GLOBALS['BE_MOD']['content']['championslists'] = array
 
 /*
  * -------------------------------------------------------------------------
+ * RECHTE
+ * -------------------------------------------------------------------------
+ *
+ * Felder, die Contao beim Laden eines Backend-Benutzers aus seinen Gruppen
+ * zusammenführt: die erlaubten Meisterlisten und die Listen-Rechte
+ * (create/delete). Ohne diese Anmeldung zählte nur der Eintrag am Benutzer
+ * selbst, die Gruppenrechte blieben wirkungslos.
+ */
+$GLOBALS['TL_PERMISSIONS'][] = 'championslists';
+$GLOBALS['TL_PERMISSIONS'][] = 'championslistsp';
+
+/*
+ * -------------------------------------------------------------------------
  * INHALTSELEMENTE
  * -------------------------------------------------------------------------
  *

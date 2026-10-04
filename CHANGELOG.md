@@ -1,5 +1,33 @@
 # Meisterliste Changelog
 
+## Version 4.2.0 (2026-10-04)
+
+**Wichtig beim Aktualisieren:** Nach dem Update den Cache leeren und die Datenbank
+aktualisieren (`contao:migrate` bzw. im Contao Manager *Datenbank aktualisieren*). Dabei läuft
+einmalig die Migration „Meisterlisten: Rechte je Liste für bestehende Gruppen und Benutzer“.
+
+* Add: Rechtevergabe je Meisterliste nach dem Vorbild der Nachrichtenarchive. Benutzergruppen
+  und Benutzer haben zwei neue Felder im Abschnitt „Meisterlisten-Rechte“: „Erlaubte
+  Meisterlisten“ (`championslists`) und „Meisterlisten-Rechte“ (`championslistsp`, Anlegen und
+  Löschen ganzer Listen). Die Übersicht zeigt nur noch erlaubte Listen; Anlegen, Kopieren und
+  Löschen ganzer Listen setzen das jeweilige Recht voraus. Administratoren sind ausgenommen.
+* Add: Eine neu angelegte oder kopierte Meisterliste wird ihrem Ersteller automatisch
+  freigeschaltet – bei der Gruppe und/oder beim Benutzer, je nachdem, woher das Recht
+  „Anlegen“ stammt.
+* Add: Die Listeneinträge prüfen bei jeder Aktion (Übersicht, Anlegen, Bearbeiten, Anzeigen,
+  Verschieben, Kopieren, Löschen, Veröffentlichen, Mehrfachbearbeitung), ob die Eltern-Liste
+  erlaubt ist, beim Verschieben und Kopieren zusätzlich die Ziel-Liste. Andernfalls wird der
+  Zugriff verweigert, auch bei einem von Hand eingegebenen Link.
+* Add: Migration, die den bisherigen Stand überführt: Jede Gruppe und jeder Benutzer mit
+  eigenem Modulrecht „Meisterlisten“ erhält alle vorhandenen Listen sowie „Anlegen“ und
+  „Löschen“ – also genau das, was vor dem Update möglich war. Die Migration legt die vier
+  neuen Spalten selbst an und läuft dadurch nur ein einziges Mal; eine später bewusst
+  geleerte Auswahl wird nicht wieder aufgefüllt.
+* Change: Die Platzierungsnamen hängen an keiner einzelnen Liste und bleiben deshalb für
+  jeden mit dem Modul „Meisterlisten“ bearbeitbar.
+* Add: `doctrine/dbal` als ausdrückliche Abhängigkeit (`^3.3 || ^4.0`), weil die Migration
+  direkt darauf zugreift.
+
 ## Version 4.1.0 (2026-09-15)
 
 * Add: Die Felder „Aufstellung" (Turniersieger) und „Aufstellung (nur Mannschaften)" (weitere

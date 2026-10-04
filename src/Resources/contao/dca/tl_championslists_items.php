@@ -10,12 +10,16 @@ declare(strict_types=1);
 
 use Contao\Backend;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
+use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\Database;
 use Contao\DataContainer;
 use Contao\DC_Table;
 use Contao\FilesModel;
+use Contao\Input;
 use Contao\StringUtil;
+use Contao\System;
 use Schachbulle\ContaoChampionslistsBundle\Classes\Helper;
+use Schachbulle\ContaoChampionslistsBundle\Classes\Permissions;
 
 /**
  * Tabelle tl_championslists_items.
@@ -31,6 +35,9 @@ $GLOBALS['TL_DCA']['tl_championslists_items'] = array
 		'enableVersioning'            => true,
 		'onload_callback' => array
 		(
+			// Die Rechteprüfung steht vorn: Ohne Zugriff auf die Eltern-Liste
+			// soll gar nichts weiter vorbereitet werden
+			array('tl_championslists_items', 'checkPermission'),
 			array('tl_championslists_items', 'checkPalette'),
 		),
 		'sql' => array
@@ -481,6 +488,138 @@ class tl_championslists_items extends Backend
 	 * @var string
 	 */
 	private static $strListType = '';
+
+	/**
+	 * Prüft, ob der Benutzer die Meisterliste bearbeiten darf, zu der die Einträge gehören.
+	 *
+	 * Maßgeblich ist immer die Eltern-Liste (Spalte pid): Wer eine Liste nicht
+	 * in seinen erlaubten Meisterlisten hat, kommt an keinen ihrer Einträge
+	 * heran – weder über die Übersicht noch über einen von Hand eingegebenen
+	 * Link. Geprüft wird je nach Aktion die Liste des betroffenen Eintrags, die
+	 * Liste der aktuellen Übersicht und beim Verschieben oder Kopieren
+	 * zusätzlich die Ziel-Liste. Das Muster entspricht
+	 * tl_news::checkPermission() aus Contao 4.13.
+	 *
+	 * Administratoren sind ausgenommen.
+	 *
+	 * @param DataContainer $dc Der Datencontainer; liefert über currentPid die
+	 *                          Meisterliste der aktuellen Übersicht (in Contao
+	 *                          4.13 aus der Konstante CURRENT_ID gespeist)
+	 *
+	 * @throws AccessDeniedException wenn die Eltern-Liste nicht erlaubt ist oder
+	 *                               die Aktion unbekannt ist
+	 */
+	public function checkPermission(DataContainer $dc): void
+	{
+		if (Permissions::isAdmin())
+		{
+			return;
+		}
+
+		$strAct = (string) Input::get('act');
+		$intCurrentPid = (int) $dc->currentPid;
+		$intId = '' !== (string) Input::get('id') ? (int) Input::get('id') : $intCurrentPid;
+
+		switch ($strAct)
+		{
+			case 'paste':
+			case 'select':
+				$this->denyUnlessListAllowed($intCurrentPid, 'access');
+				break;
+
+			case 'create':
+				$this->denyUnlessListAllowed($this->getTargetList(), 'create items in');
+				break;
+
+			case 'cut':
+			case 'copy':
+				// Erst das Ziel prüfen, dann wie bei "edit" die Herkunft
+				$this->denyUnlessListAllowed($this->getTargetList(), $strAct.' items to');
+				$this->denyUnlessListAllowed(Permissions::getListOfItem($intId), $strAct.' items of');
+				break;
+
+			case 'edit':
+			case 'show':
+			case 'delete':
+			case 'toggle':
+				$this->denyUnlessListAllowed(Permissions::getListOfItem($intId), $strAct.' items of');
+				break;
+
+			case 'editAll':
+			case 'deleteAll':
+			case 'overrideAll':
+			case 'cutAll':
+			case 'copyAll':
+				$this->denyUnlessListAllowed($intCurrentPid, 'access');
+
+				if (('cutAll' === $strAct || 'copyAll' === $strAct) && '' !== (string) Input::get('pid'))
+				{
+					$this->denyUnlessListAllowed($this->getTargetList(), $strAct.' items to');
+				}
+
+				// Nur Einträge der aktuellen Liste dürfen in der Mehrfachauswahl
+				// bleiben – sonst ließen sich über die Sitzung fremde IDs einschleusen
+				$objItems = Database::getInstance()
+					->prepare('SELECT id FROM tl_championslists_items WHERE pid=?')
+					->execute($intCurrentPid);
+
+				$objSession = System::getContainer()->get('request_stack')->getSession();
+				$arrSession = $objSession->all();
+				$arrSession['CURRENT']['IDS'] = array_values(array_intersect(
+					array_map('\intval', (array) ($arrSession['CURRENT']['IDS'] ?? array())),
+					array_map('\intval', $objItems->fetchEach('id'))
+				));
+				$objSession->replace($arrSession);
+				break;
+
+			case '':
+				// Übersicht der Einträge einer Liste
+				$this->denyUnlessListAllowed($intId, 'access');
+				break;
+
+			default:
+				throw new AccessDeniedException('Invalid command "'.$strAct.'".');
+		}
+	}
+
+	/**
+	 * Ermittelt die Ziel-Liste beim Anlegen, Verschieben oder Kopieren.
+	 *
+	 * Contao übergibt das Ziel im Parameter "pid", dessen Bedeutung vom
+	 * Parameter "mode" abhängt: Bei mode=1 ("nach einem Eintrag einfügen") ist
+	 * pid die ID eines Eintrags, sonst (mode=2, "an den Anfang der Liste") die
+	 * ID der Meisterliste selbst.
+	 *
+	 * @return int|null ID der Ziel-Liste, oder null wenn sie sich nicht ermitteln lässt
+	 */
+	private function getTargetList(): ?int
+	{
+		$intPid = (int) Input::get('pid');
+
+		if ($intPid < 1)
+		{
+			return null;
+		}
+
+		return 1 === (int) Input::get('mode') ? Permissions::getListOfItem($intPid) : $intPid;
+	}
+
+	/**
+	 * Bricht mit einer Zugriffsverweigerung ab, wenn die Meisterliste nicht erlaubt ist.
+	 *
+	 * @param int|null $intListId ID der Meisterliste; null (unbekannter Eintrag,
+	 *                            fehlendes Ziel) gilt als nicht erlaubt
+	 * @param string   $strAction Beschreibung der Aktion für die Fehlermeldung
+	 *
+	 * @throws AccessDeniedException wenn die Liste nicht erlaubt ist
+	 */
+	private function denyUnlessListAllowed(?int $intListId, string $strAction): void
+	{
+		if (null === $intListId || !Permissions::isListAllowed($intListId))
+		{
+			throw new AccessDeniedException('Not enough permissions to '.$strAction.' championslist ID '.(int) $intListId.'.');
+		}
+	}
 
 	/**
 	 * Passt die Palette an den Typ der übergeordneten Meisterliste an.

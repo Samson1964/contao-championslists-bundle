@@ -38,13 +38,15 @@ class DcaConfigurationTest extends TestCase
 		// Grundgerüst der Kern-DCA, die vom Bundle erweitert werden
 		$GLOBALS['TL_DCA']['tl_content'] = array('palettes' => array('__selector__' => array()), 'fields' => array());
 		$GLOBALS['TL_DCA']['tl_settings'] = array('palettes' => array('default' => '{global_legend},dateFormat'), 'fields' => array());
+		$GLOBALS['TL_DCA']['tl_user'] = array('palettes' => array('extend' => '{name_legend},name;{amg_legend},alexf', 'custom' => '{name_legend},name;{amg_legend},alexf', 'group' => '{name_legend},name'), 'fields' => array());
+		$GLOBALS['TL_DCA']['tl_user_group'] = array('palettes' => array('default' => '{title_legend},name;{amg_legend},alexf'), 'fields' => array());
 
 		foreach (glob($strBase.'/languages/de/*.php') as $strFile)
 		{
 			include $strFile;
 		}
 
-		foreach (array('tl_championslists', 'tl_championslists_categories', 'tl_championslists_items', 'tl_content', 'tl_settings') as $strTable)
+		foreach (array('tl_championslists', 'tl_championslists_categories', 'tl_championslists_items', 'tl_content', 'tl_settings', 'tl_user', 'tl_user_group') as $strTable)
 		{
 			include_once $strBase.'/dca/'.$strTable.'.php';
 		}
@@ -255,6 +257,82 @@ class DcaConfigurationTest extends TestCase
 		foreach (array('platz', 'name', 'verein', 'alter', 'rating', 'image', 'spielerregister', 'aufstellung') as $strSpalte)
 		{
 			$this->assertArrayHasKey($strSpalte, $arrSpalten, $strSpalte);
+		}
+	}
+
+	/**
+	 * Die Rechte je Meisterliste hängen an zwei Feldern, die in tl_user und
+	 * tl_user_group gleich aufgebaut sein müssen – Contao führt Benutzer- und
+	 * Gruppenwerte nur zusammen, wenn beide Tabellen dieselben Feldnamen haben.
+	 *
+	 * @dataProvider benutzerTabellen
+	 */
+	public function testRechtefelderSindAngelegt(string $strTable): void
+	{
+		$arrFelder = self::$arrDca[$strTable]['fields'];
+
+		$this->assertSame('checkbox', $arrFelder['championslists']['inputType']);
+		$this->assertSame('tl_championslists.title', $arrFelder['championslists']['foreignKey']);
+		$this->assertTrue($arrFelder['championslists']['eval']['multiple']);
+		$this->assertSame('blob NULL', $arrFelder['championslists']['sql']);
+
+		$this->assertSame(array('create', 'delete'), $arrFelder['championslistsp']['options']);
+		$this->assertTrue($arrFelder['championslistsp']['eval']['multiple']);
+		$this->assertSame('blob NULL', $arrFelder['championslistsp']['sql']);
+
+		foreach (array('championslists', 'championslistsp') as $strFeld)
+		{
+			$this->assertNotEmpty($arrFelder[$strFeld]['label'], $strTable.'.'.$strFeld);
+			$this->assertTrue($arrFelder[$strFeld]['exclude'], $strTable.'.'.$strFeld);
+		}
+	}
+
+	/**
+	 * @return array<int, array<int, string>>
+	 */
+	public function benutzerTabellen(): array
+	{
+		return array(array('tl_user'), array('tl_user_group'));
+	}
+
+	/**
+	 * Die Rechtefelder stehen vor den erlaubten Feldern (amg_legend) in einer
+	 * eigenen Legende. Beim Benutzer nur dort, wo er eigene Rechte haben kann –
+	 * nicht in der Palette "group", in der alles von den Gruppen kommt.
+	 */
+	public function testRechtefelderStehenInDenPaletten(): void
+	{
+		$strErwartet = '{championslists_legend},championslists,championslistsp;{amg_legend}';
+
+		$this->assertStringContainsString($strErwartet, self::$arrDca['tl_user']['palettes']['extend']);
+		$this->assertStringContainsString($strErwartet, self::$arrDca['tl_user']['palettes']['custom']);
+		$this->assertStringNotContainsString('championslists', self::$arrDca['tl_user']['palettes']['group']);
+		$this->assertStringContainsString($strErwartet, self::$arrDca['tl_user_group']['palettes']['default']);
+
+		$this->assertNotEmpty($GLOBALS['TL_LANG']['tl_user']['championslists_legend']);
+		$this->assertNotEmpty($GLOBALS['TL_LANG']['tl_user_group']['championslists_legend']);
+	}
+
+	/**
+	 * Die Prüfung muss beim Laden des Datencontainers laufen, und zwar vor
+	 * allem anderen. Neue und kopierte Listen werden dem Ersteller freigeschaltet.
+	 */
+	public function testRechtepruefungIstVerdrahtet(): void
+	{
+		$arrListen = self::$arrDca['tl_championslists']['config'];
+
+		$this->assertSame(array('tl_championslists', 'checkPermission'), $arrListen['onload_callback'][0]);
+		$this->assertSame(array('tl_championslists', 'adjustPermissionsOnCreate'), $arrListen['oncreate_callback'][0]);
+		$this->assertSame(array('tl_championslists', 'adjustPermissionsOnCopy'), $arrListen['oncopy_callback'][0]);
+
+		$this->assertSame(
+			array('tl_championslists_items', 'checkPermission'),
+			self::$arrDca['tl_championslists_items']['config']['onload_callback'][0]
+		);
+
+		foreach (array(array('tl_championslists', 'checkPermission'), array('tl_championslists', 'adjustPermissionsOnCreate'), array('tl_championslists', 'adjustPermissionsOnCopy'), array('tl_championslists_items', 'checkPermission')) as $arrCallback)
+		{
+			$this->assertTrue(method_exists($arrCallback[0], $arrCallback[1]), implode('::', $arrCallback));
 		}
 	}
 
